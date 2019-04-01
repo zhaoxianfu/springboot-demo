@@ -27,3 +27,9 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+mvnw.cmd
+mvnw
+.mvn
+src/main/resources/templates/
+/mvnw
+/mvnw.cmd

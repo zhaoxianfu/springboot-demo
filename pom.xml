@@ -27,6 +27,7 @@
         <fastjson.version>1.2.40</fastjson.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+        <httpclient.version>4.5.1</httpclient.version>
     </properties>
 
     <dependencies>
@@ -159,6 +160,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!--httpclient依赖-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
 
         <!--测试启动器-->

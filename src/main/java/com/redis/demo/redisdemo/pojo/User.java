@@ -18,7 +18,9 @@ public class User implements Serializable {
 
     public static final String Table = "t_user";
 
+    private Long id;
     private String name;
     private String address;
     private Integer age;
+    private String userName;
 }
