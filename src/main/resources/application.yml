@@ -24,12 +24,18 @@ spring:
       maximum-pool-size: 30
       minimum-idle: 10
 
-#spring-boot-starter-actuator健康检查配置
-health:
-  config:
-    enabled: true
-endpoints:
-  restart:
-    enabled: true
-  refresh:
-    enabled: false
+management:
+  server:
+    port: 8090                #安全起见，监控使用和服务不同的端口,自定义一个监控的端口号
+    servlet:
+      context-path: /
+    ssl:
+      enabled: false
+
+  endpoints:
+    web:
+      exposure:
+        include: *            #开放所有的端点进行可以进行访问
+  endpoint:
+    health:
+      show-details: always    #调用health端点的时候显示所有的健康信息(包括redis等其他的一些)
