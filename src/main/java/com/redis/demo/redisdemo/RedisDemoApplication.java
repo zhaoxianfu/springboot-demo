@@ -2,8 +2,11 @@ package com.redis.demo.redisdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -16,7 +19,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableCaching
 @EnableTransactionManagement
+@EnableAsync
+@EnableScheduling
 public class RedisDemoApplication {
 
     public static void main(String[] args) {
@@ -52,7 +58,7 @@ public class RedisDemoApplication {
      */
     @Bean
     public RestTemplate restTemplate() {
-        // 默认的RestTemplate，底层是走JDK的URLConnection方式。
+        // 默认的RestTemplate，底层是走JDK的URLConnection方式。这里配置httpClient连接,还有一种okHttpClient连接
         return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
     }
 }

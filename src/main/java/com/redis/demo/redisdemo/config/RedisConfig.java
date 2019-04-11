@@ -90,7 +90,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(dataJedisProperties.getMaxIdle());
         jedisPoolConfig.setMaxWaitMillis(dataJedisProperties.getMaxWaitMillis());
-
         return jedisPoolConfig;
     }
 
@@ -105,6 +104,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         log.info("Create JedisConnectionFactory successful");
         JedisConnectionFactory factory = new JedisConnectionFactory();
 
+//        Jedis jedis = factory.getShardInfo().createResource();
         //设置连接池配置类对象
         factory.setPoolConfig(jedisPoolConfig);
         factory.setHostName(dataJedisProperties.getHost());
