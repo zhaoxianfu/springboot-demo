@@ -1,7 +1,8 @@
 server:
-  port: 9090
+  port: 8080
 
 spring:
+#redis的相关配置
   redis:
     database: 0           #redis操作的数据库,从0-15,我们这里选择0
     host: 127.0.1         #redis的地址
@@ -15,27 +16,90 @@ spring:
     timeout: 1000           #等待时间
     password:               #redis默认没有密码
 
+#数据源的相关配置
   datasource:
-    url: jdbc:mysql://localhost:3306/redis_demo          #数据库的连接地址
-    driverclassname: com.mysql.jdbc.Driver               #mysql数据库连接驱动
+    url: jdbc:mysql://localhost:3306/redis_demo?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true          #数据库的连接地址
+    driverclassname: com.mysql.cj.jdbc.Driver               #mysql数据库连接驱动
     username: root                                       #用户名
     password: 123456                                     #密码
     hikari:                                              #hikari数据库连接池的配置
       maximum-pool-size: 30
       minimum-idle: 10
 
+#email的相关配置
+  mail:
+    host: smtp.qq.com             #根据发件人的邮箱是什么邮箱确定的
+    port: 465
+    protocol: smtp                #邮箱发送的协议
+    properties:
+      mail:
+        smtp:
+          connecttimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+          # 设置是否需要认证,如果为true,那么用户名和密码就必须的
+          # 如果设置false,可以不设置用户名和密码,当然也得看你的对接的平台是否支持无密码进行访问的。
+          auth: true
+          ssl:
+            enable: true           #是否用启用加密传送的协议验证项
+          starttls:                # STARTTLS[1]是对纯文本通信协议的扩展。它提供一种方式将纯文本连接升级为加密连接（TLS或SSL）,而不是另外使用一个端口作加密通信。
+            enable: true
+            required: true
+    default-encoding: UTF-8        #Default MimeMessage encoding编码格式
+    username: 502162511@qq.com     #发送方的邮箱号码
+    password: ydrvmfixzudebjij     #注意：在spring.mail.password处的值是需要在邮箱设置里面生成的授权码，这个不是真实的密码。
+
+#jackson配置
+  jackson:
+    #日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+08
+    serialization:
+      write-dates-as-timestamps: false
+      #格式化输出
+      indent_output: true
+      #忽略无法转换的对象
+      fail_on_empty_beans: false
+    #设置空如何序列化
+    defaultPropertyInclusion: non_null
+    deserialization:
+      #允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: true
+    parser:
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+      #允许出现单引号
+      allow_single_quotes: true
+
+#mybatis的配置
+mybatis:
+  type-aliases-package: com.redis.demo.redisdemo.dataobject       #DO对象别名
+  configuration:
+    map-underscore-to-camel-case: true                           #支持DO对象属性和数据库字段驼峰映射
+  mapper-locations: classpath*:mapper/**/Mapper.xml
+##发送邮件地址
+mail:
+  fromMail:
+    sender: ${spring.mail.username}   #必须和我们发送方的邮箱号码一致
+##接收邮件地址
+    receiver: zhaoxianfu1594@163.com
+
+#端点的相关配置
 management:
   server:
-    port: 8090                #安全起见，监控使用和服务不同的端口,自定义一个监控的端口号
     servlet:
       context-path: /
     ssl:
       enabled: false
-
   endpoints:
     web:
       exposure:
-        include: *            #开放所有的端点进行可以进行访问
+        include: "*"           #开放所有的端点进行可以进行访问
   endpoint:
     health:
       show-details: always    #调用health端点的时候显示所有的健康信息(包括redis等其他的一些)
+
+#设置日志级别---可以针对一个文件夹下指定日志的级别
+logging:
+  level:
+    root: info

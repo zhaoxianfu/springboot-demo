@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.redis.demo.redisdemo.dao.BrandMapper">
-    <resultMap id="BaseResultMap" type="com.redis.demo.redisdemo.dataobject.Brand">
+<mapper namespace="com.redis.demo.dao.BrandMapper">
+    <resultMap id="BaseResultMap" type="com.redis.demo.dataobject.Brand">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="image" jdbcType="VARCHAR" property="image"/>
@@ -68,7 +68,7 @@
     <sql id="Base_Column_List">
     id, name, image, letter
   </sql>
-    <select id="selectByExample" parameterType="com.redis.demo.redisdemo.dataobject.BrandExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.redis.demo.dataobject.BrandExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -92,13 +92,13 @@
     delete from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <delete id="deleteByExample" parameterType="com.redis.demo.redisdemo.dataobject.BrandExample">
+    <delete id="deleteByExample" parameterType="com.redis.demo.dataobject.BrandExample">
         delete from tb_brand
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.redis.demo.redisdemo.dataobject.Brand">
+    <insert id="insert" parameterType="com.redis.demo.dataobject.Brand">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -107,7 +107,7 @@
         values (#{name,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{letter,jdbcType=CHAR}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.redis.demo.redisdemo.dataobject.Brand">
+    <insert id="insertSelective" parameterType="com.redis.demo.dataobject.Brand">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -135,7 +135,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.redis.demo.redisdemo.dataobject.BrandExample" resultType="java.lang.Long">
+    <select id="countByExample" parameterType="com.redis.demo.dataobject.BrandExample" resultType="java.lang.Long">
         select count(*) from tb_brand
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -171,7 +171,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.redis.demo.redisdemo.dataobject.Brand">
+    <update id="updateByPrimaryKeySelective" parameterType="com.redis.demo.dataobject.Brand">
         update tb_brand
         <set>
             <if test="name != null">
@@ -186,7 +186,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.redis.demo.redisdemo.dataobject.Brand">
+    <update id="updateByPrimaryKey" parameterType="com.redis.demo.dataobject.Brand">
     update tb_brand
     set name = #{name,jdbcType=VARCHAR},
       image = #{image,jdbcType=VARCHAR},

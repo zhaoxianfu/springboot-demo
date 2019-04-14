@@ -20,47 +20,33 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <mybatis.starter.version>2.0.0</mybatis.starter.version>
-        <mysql.version>5.1.32</mysql.version>
-        <lang3.version>3.7</lang3.version>
-        <lombok.version>1.18.6</lombok.version>
-        <commons-pool2.version>2.5.0</commons-pool2.version>
-        <fastjson.version>1.2.40</fastjson.version>
+        <fastjson.version>1.2.57</fastjson.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-        <httpclient.version>4.5.1</httpclient.version>
         <mybatis-generator.version>1.3.6</mybatis-generator.version>
+        <collections4.version>4.3</collections4.version>
+        <okhttp.version>3.14.1</okhttp.version>
     </properties>
 
     <dependencies>
         <!-- Spring Boot Redis依赖 -->
-        <!-- 注意：1.5版本的依赖和2.0的依赖不一样，注意看哦 1.5我记得名字里面应该没有“data”, 2.0必须是“spring-boot-starter-data-redis” 这个才行-->
+        <!-- 注意：1.5版本的依赖和2.0的依赖不一样，注意看哦 1.5我记得名字里面应该没有"data", 2.0必须是"spring-boot-starter-data-redis" 这个才行-->
         <!-- 1.5的版本默认采用的连接池技术是jedis  2.0以上版本默认连接池是lettuce, 在这里采用jedis，所以需要排除lettuce的jar -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>redis.clients</groupId>
-                    <artifactId>jedis</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>io.lettuce</groupId>
                     <artifactId>lettuce-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+
         <!-- 添加jedis客户端 -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-        </dependency>
-        <!--spring2.0集成redis所需common-pool2,jedis连接池-->
-        <!-- 必须加上，jedis依赖此  -->
-        <!-- spring boot 2.0 的操作手册有标注 大家可以去看看 地址是：https://docs.spring.io/spring-boot/docs/2.0.3.RELEASE/reference/htmlsingle/-->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>${commons-pool2.version}</version>
         </dependency>
 
         <!--web启动器-->
@@ -98,15 +84,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
         </dependency>
 
         <!--MySQL连接-JDBC-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -145,7 +130,13 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${lang3.version}</version>
+        </dependency>
+
+        <!--collection集合工具类的依赖-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${collections4.version}</version>
         </dependency>
 
         <!--SpringAMQP的启动器，基于AMQP协议对RabbitMQ服务java代码发送消息和接收消息的的封装-->
@@ -154,7 +145,7 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
-        <!--hystrixdashboard进行监控的服务提供端,服务提供方需要配置-->
+        <!--服务监控的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -167,11 +158,23 @@
             <optional>true</optional>
         </dependency>
 
+        <!--springBoot整合邮件发送-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!--httpclient依赖-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
+        </dependency>
+
+       <!--okHttpClient的依赖-->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
 
         <!--测试启动器-->
@@ -180,6 +183,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>
