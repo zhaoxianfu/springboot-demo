@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -18,13 +19,14 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@SpringBootApplication
-@EnableSwagger2
-@EnableCaching
-@EnableTransactionManagement
-@MapperScan("com.redis.demo.dao")    //配置扫描mapper接口，然后创建对象放到IOC容器中
-@EnableAsync
-@EnableScheduling
+@SpringBootApplication(scanBasePackages = {"com.redis.demo"})     //可以加载多个模块下的所有的bean
+@EnableSwagger2                                      //开启swagger文档
+@EnableCaching                                      //开启spring的缓存
+@EnableTransactionManagement                       //开启声明式事务
+@MapperScan("com.redis.demo.dao")                 //配置扫描mapper接口，然后创建对象放到IOC容器中
+@EnableAsync                                     //开启异步任务
+@EnableScheduling                               //开启定时任务
+@EnableFeignClients("com.redis.demo")          //可以加载到本项目中所有的子模块中的@FeignClient注解的bean,basePackages属性会加载依赖里面的
 public class RedisDemoApplication {
 
     public static void main(String[] args) {

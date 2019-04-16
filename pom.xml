@@ -26,6 +26,10 @@
         <mybatis-generator.version>1.3.6</mybatis-generator.version>
         <collections4.version>4.3</collections4.version>
         <okhttp.version>3.14.1</okhttp.version>
+        <mybatis-plus.version>3.1.0</mybatis-plus.version>
+        <mapper.version>2.1.5</mapper.version>
+        <druid.version>1.1.16</druid.version>
+        <velocity.version>2.1</velocity.version>
     </properties>
 
     <dependencies>
@@ -55,11 +59,49 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--MySQL连接-JDBC-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!-- druid阿里巴巴数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+
         <!--mybatis启动器-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis.starter.version}</version>
+        </dependency>
+
+        <!--mybatis-plus的依赖-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!--mybatis-plus逆向工程的依赖-->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity.version}</version>
+        </dependency>
+
+        <!--通用mapper的依赖-->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>${mapper.version}</version>
         </dependency>
 
         <!--feign服务调用启动器-->
@@ -84,17 +126,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-
-        <!--MySQL连接-JDBC-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
         <!--fastjson-->
@@ -170,7 +201,7 @@
             <artifactId>httpclient</artifactId>
         </dependency>
 
-       <!--okHttpClient的依赖-->
+        <!--okHttpClient的依赖-->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
