@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.redis.demo.dao.CategoryMapper">
-    <resultMap id="BaseResultMap" type="com.redis.demo.dataobject.Category">
+<mapper namespace="com.redis.demo.mapper.BrandMapper">
+    <resultMap id="BaseResultMap" type="com.redis.demo.dataobject.Brand">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
-        <result column="is_parent" jdbcType="BIT" property="isParent"/>
-        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="image" jdbcType="VARCHAR" property="image"/>
+        <result column="letter" jdbcType="CHAR" property="letter"/>
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -67,15 +66,15 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    id, name, parent_id, is_parent, sort
+    id, name, image, letter
   </sql>
-    <select id="selectByExample" parameterType="com.redis.demo.dataobject.CategoryExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.redis.demo.dataobject.BrandExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from tb_category
+        from tb_brand
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -86,70 +85,64 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from tb_category
+        from tb_brand
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from tb_category
+    delete from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <delete id="deleteByExample" parameterType="com.redis.demo.dataobject.CategoryExample">
-        delete from tb_category
+    <delete id="deleteByExample" parameterType="com.redis.demo.dataobject.BrandExample">
+        delete from tb_brand
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.redis.demo.dataobject.Category">
+    <insert id="insert" parameterType="com.redis.demo.dataobject.Brand">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into tb_category (name, parent_id, is_parent,
-        sort)
-        values (#{name,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, #{isParent,jdbcType=BIT},
-        #{sort,jdbcType=INTEGER})
+        insert into tb_brand (name, image, letter
+        )
+        values (#{name,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{letter,jdbcType=CHAR}
+        )
     </insert>
-    <insert id="insertSelective" parameterType="com.redis.demo.dataobject.Category">
+    <insert id="insertSelective" parameterType="com.redis.demo.dataobject.Brand">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into tb_category
+        insert into tb_brand
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null">
                 name,
             </if>
-            <if test="parentId != null">
-                parent_id,
+            <if test="image != null">
+                image,
             </if>
-            <if test="isParent != null">
-                is_parent,
-            </if>
-            <if test="sort != null">
-                sort,
+            <if test="letter != null">
+                letter,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
-            <if test="parentId != null">
-                #{parentId,jdbcType=BIGINT},
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
             </if>
-            <if test="isParent != null">
-                #{isParent,jdbcType=BIT},
-            </if>
-            <if test="sort != null">
-                #{sort,jdbcType=INTEGER},
+            <if test="letter != null">
+                #{letter,jdbcType=CHAR},
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.redis.demo.dataobject.CategoryExample" resultType="java.lang.Long">
-        select count(*) from tb_category
+    <select id="countByExample" parameterType="com.redis.demo.dataobject.BrandExample" resultType="java.lang.Long">
+        select count(*) from tb_brand
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update tb_category
+        update tb_brand
         <set>
             <if test="record.id != null">
                 id = #{record.id,jdbcType=BIGINT},
@@ -157,14 +150,11 @@
             <if test="record.name != null">
                 name = #{record.name,jdbcType=VARCHAR},
             </if>
-            <if test="record.parentId != null">
-                parent_id = #{record.parentId,jdbcType=BIGINT},
+            <if test="record.image != null">
+                image = #{record.image,jdbcType=VARCHAR},
             </if>
-            <if test="record.isParent != null">
-                is_parent = #{record.isParent,jdbcType=BIT},
-            </if>
-            <if test="record.sort != null">
-                sort = #{record.sort,jdbcType=INTEGER},
+            <if test="record.letter != null">
+                letter = #{record.letter,jdbcType=CHAR},
             </if>
         </set>
         <if test="_parameter != null">
@@ -172,40 +162,35 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update tb_category
+        update tb_brand
         set id = #{record.id,jdbcType=BIGINT},
         name = #{record.name,jdbcType=VARCHAR},
-        parent_id = #{record.parentId,jdbcType=BIGINT},
-        is_parent = #{record.isParent,jdbcType=BIT},
-        sort = #{record.sort,jdbcType=INTEGER}
+        image = #{record.image,jdbcType=VARCHAR},
+        letter = #{record.letter,jdbcType=CHAR}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.redis.demo.dataobject.Category">
-        update tb_category
+    <update id="updateByPrimaryKeySelective" parameterType="com.redis.demo.dataobject.Brand">
+        update tb_brand
         <set>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="parentId != null">
-                parent_id = #{parentId,jdbcType=BIGINT},
+            <if test="image != null">
+                image = #{image,jdbcType=VARCHAR},
             </if>
-            <if test="isParent != null">
-                is_parent = #{isParent,jdbcType=BIT},
-            </if>
-            <if test="sort != null">
-                sort = #{sort,jdbcType=INTEGER},
+            <if test="letter != null">
+                letter = #{letter,jdbcType=CHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.redis.demo.dataobject.Category">
-    update tb_category
+    <update id="updateByPrimaryKey" parameterType="com.redis.demo.dataobject.Brand">
+    update tb_brand
     set name = #{name,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=BIGINT},
-      is_parent = #{isParent,jdbcType=BIT},
-      sort = #{sort,jdbcType=INTEGER}
+      image = #{image,jdbcType=VARCHAR},
+      letter = #{letter,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

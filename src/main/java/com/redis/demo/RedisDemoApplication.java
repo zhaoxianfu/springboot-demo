@@ -23,7 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2                                      //开启swagger文档
 @EnableCaching                                      //开启spring的缓存
 @EnableTransactionManagement                       //开启声明式事务
-@MapperScan("com.redis.demo.dao")                 //配置扫描mapper接口，然后创建对象放到IOC容器中
+@MapperScan("com.redis.demo.mapper")                 //配置扫描mapper接口，然后创建对象放到IOC容器中,使用这个注解包扫描就不用在每个DO对象上加@Mapper注解了
 @EnableAsync                                     //开启异步任务
 @EnableScheduling                               //开启定时任务
 @EnableFeignClients("com.redis.demo")          //可以加载到本项目中所有的子模块中的@FeignClient注解的bean,basePackages属性会加载依赖里面的
