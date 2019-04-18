@@ -2,14 +2,14 @@ server:
   port: 8080
 
 spring:
-#默认多环境属性文件配置
+  #默认多环境属性文件配置
   profiles:
     active: dev
-#启动aop配置
+  #启动aop配置
   aop:
     auto: true
 
-#redis的相关配置
+  #redis的相关配置
   redis:
     database: 0           #redis操作的数据库,从0-15,我们这里选择0
     host: 127.0.1         #redis的地址
@@ -23,16 +23,16 @@ spring:
     timeout: 1000           #等待时间
     password:               #redis默认没有密码
 
-#数据源的相关配置
+  #数据源的相关配置
   datasource:
     url: jdbc:mysql://localhost:3306/redis_demo?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true          #数据库的连接地址
     driverclassname: com.mysql.cj.jdbc.Driver               #mysql数据库连接驱动
-    username: root                                       #用户名
-    password: 123456                                     #密码
+    username: root                                          #用户名
+    password: 123456                                        #密码
 
-##########################  druid配置   ##########################
+    ##########################  druid配置   ##########################
     type: com.alibaba.druid.pool.DruidDataSource
-#druid_config
+    #druid_config
     druid:
       validation-query: "SELECT 'X' FROM DUAL"
       max-wait: 10000 #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制
@@ -50,7 +50,7 @@ spring:
       connection-properties: config.decrypt=true;druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       filters: stat,wall,log4j2
 
-#email的相关配置
+  #email的相关配置
   mail:
     host: smtp.qq.com             #根据发件人的邮箱是什么邮箱确定的
     port: 465
@@ -73,7 +73,7 @@ spring:
     username: 502162511@qq.com     #发送方的邮箱号码
     password: ydrvmfixzudebjij     #注意：在spring.mail.password处的值是需要在邮箱设置里面生成的授权码，这个不是真实的密码。
 
-#jackson配置
+  #jackson配置
   jackson:
     #日期格式化
     date-format: yyyy-MM-dd HH:mm:ss
@@ -84,7 +84,7 @@ spring:
       indent_output: true
       #忽略无法转换的对象
       fail_on_empty_beans: false
-    #设置空如何序列化
+      #设置空如何序列化
     defaultPropertyInclusion: non_null
     deserialization:
       #允许对象忽略json中不存在的属性
@@ -95,8 +95,8 @@ spring:
       #允许出现单引号
       allow_single_quotes: true
 
-#mybatis的配置
-#mybatis:
+  #mybatis的配置
+  #mybatis:
   type-aliases-package: com.redis.demo.redisdemo.dataobject       #DO对象别名
   configuration:
     map-underscore-to-camel-case: true                           #支持DO对象属性和数据库字段驼峰映射
@@ -133,7 +133,7 @@ spring:
 #    map-underscore-to-camel-case: true
 #    cache-enabled: true
 
-#切面进行日志管理, true为开启这个切面,值为空或者为false为不开启这个切面
+#切面进行日志管理,设置可进行拔插的功能, true为开启这个切面,值为空或者为false为不开启这个切面
 log:
   logAspect1:
     enabled: false
@@ -141,11 +141,23 @@ log:
   logAspect2:
     enabled: true
 
+#配置用户登录拦截器注册不注册到容器中,设置可拔插的功能,自己控制这个bean是否注入到容器中,true为注入这个拦截器,值为空或者为false为不注入这个拦截器
+interceptor:
+  loginInterceptor:
+    enabled: false
+
+#配置过滤器-->设置可进行拔插的功能,自己控制这个bean是否注入到容器中,true为注入这个过滤器,值为空或者为false为不注入这个过滤器
+filter:
+  myFilter1:
+    enabled: true
+  myFilter2:
+    enabled: true
+
 ##发送邮件地址
 mail:
   fromMail:
     sender: ${spring.mail.username}   #必须和我们发送方的邮箱号码一致
-##接收邮件地址
+    ##接收邮件地址
     receiver: zhaoxianfu1594@163.com
 
 #端点的相关配置
@@ -161,7 +173,24 @@ management:
         include: "*"           #开放所有的端点进行可以进行访问
   endpoint:
     health:
-      show-details: always    #调用health端点的时候显示所有的健康信息(包括redis等其他的一些)
+      show-details: always     #调用health端点的时候显示所有的健康信息(包括redis等其他的一些)
+
+#全局的负载均衡配置，配置所有的服务提供端的负载均衡策略(按照什么去调用集群的多个服务)，值为IRule的实现类，默认情况为轮询方式。
+ribbon:                       #配置对同一个服务不同实例的负载均衡
+  ConnectTimeout: 250         #连接超时时间(ms)
+  ReadTimeout: 2000           #通信超时时间(ms)
+  OkToRetryOnAllOperations: true    #是否对所有操作重试
+  MaxAutoRetriesNextServer: 1       #同一服务切换实例的重试次数
+  MaxAutoRetries: 2                 # 对当前服务实例的重试次数
+  # 设置消费端熔断机制对的时间，当超过这个时间就会，就会断开请求服务，调用自己写的方法返回数据
+  # 一般需要设置熔断机制的时间大于重试机制的时间
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMillisecond: 10000 # 熔断超时时长：10s，当请求服务超过10s这个时间就会进行调用熔断需要执行的方法,这个时间要大于重试机制的Ribbon连接超时时间
 
 #设置日志级别---可以针对一个文件夹下指定日志的级别,也可以在logback.xml里面配置root下的普遍的日志级别,也可以单独指定一个包下的日志级别进行打印
 logging:

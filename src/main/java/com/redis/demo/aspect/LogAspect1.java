@@ -9,8 +9,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,10 +24,14 @@ import java.util.UUID;
  * @Date:Created 2019/4/17  12:38
  * @Version1.0
  **/
-@Component
+
+@Slf4j
+@Configuration   //这个注解和@Component作用类似,
+//只不过在@Component的作用上增加了可以进行扫描带有@Configuration类里面@bean注解,进行注入方法返回值对象到容器中
 @Aspect
 @Order(1)
-@Slf4j
+//设置这个bean可拔插的功能,当为true时注入这个bean对象到容器中,为false或者没有这个属性时,使用matchIfMissing里面设置的属性值和havingValue里面的进行比较,
+// 一致则生效,不一致则不注入这个bean
 @ConditionalOnProperty(prefix = "log.logAspect1", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class LogAspect1 {
 
@@ -77,7 +81,8 @@ public class LogAspect1 {
 
         log.info("目标方法名为:" + signature.getName());
         log.info("目标方法所属类的简单类名:" + signature.getDeclaringType().getSimpleName());
-        log.info("目标方法所属类的类名:" + signature.getDeclaringTypeName());
+        log.info("目标方法所属类的类名方式一:" + signature.getDeclaringTypeName());
+        log.info("目标方法所属类的类名方式二:" + joinPoint.getTarget().getClass().getName());
         log.info("目标方法声明类型:" + signature.getModifiers());
 
         OperationLog operationLog = new OperationLog();
@@ -97,7 +102,7 @@ public class LogAspect1 {
         operationLog.setUserId("#{currentUserId}");
         operationLog.setUserName("#{currentUserName}");
 
-        //获取连接点上的注解
+        //获取连接点方法上的注解,进而获取注解里面的属性,当然也可以通过把注解直接加到切面上形式参数中传递进来
         OperationLogDetail annotation = signature.getMethod().getAnnotation(OperationLogDetail.class);
 
         if (null != annotation) {

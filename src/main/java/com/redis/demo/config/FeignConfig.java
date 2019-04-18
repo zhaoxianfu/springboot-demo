@@ -1,6 +1,7 @@
 package com.redis.demo.config;
 
 import feign.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
  * @Date:Created 2018/9/17  10:01
  * @Version1.0
  **/
+
+@Slf4j
 @Configuration
 public class FeignConfig {
     @Bean

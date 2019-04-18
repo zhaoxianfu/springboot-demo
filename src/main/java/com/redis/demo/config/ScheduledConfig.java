@@ -1,5 +1,6 @@
 package com.redis.demo.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -14,6 +15,8 @@ import java.util.concurrent.*;
  * @Date:Created 2019/4/1  11:42
  * @Version1.0
  **/
+
+@Slf4j
 @Configuration
 public class ScheduledConfig implements SchedulingConfigurer {
 

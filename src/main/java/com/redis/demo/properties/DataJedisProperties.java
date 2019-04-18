@@ -1,4 +1,4 @@
-package com.redis.demo.config;
+package com.redis.demo.properties;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
  * @Date:Created 2019/3/27  15:51
  * @Version1.0
  **/
-@Component
+
 @Data
+@Component
 public class DataJedisProperties {
+
     @Value("${spring.redis.host}")
     private  String host;
     @Value("${spring.redis.password}")
@@ -28,4 +30,5 @@ public class DataJedisProperties {
     private int maxIdle;
     @Value("${spring.redis.jedis.pool.max-wait}")
     private long maxWaitMillis;
+
 }

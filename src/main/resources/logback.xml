@@ -11,6 +11,7 @@
     <!--指明指定包路径下的日志级别信息,在root指定的日志级别加上这个包下级别下的日志文件-->
     <!--web信息-->
     <logger name="org.springframework.web" level="info"/>
+
     <!--配置mybatis sql日志-->
     <logger name="com.redis.demo.dao" level="debug"/>
 
@@ -211,13 +212,13 @@
     <!-- 基于INFO级别默认的处理日志方式-如果没有配置多环境就默认使用这个,具体控制台或者文件对日志级别的处理还要看所在appender配置的filter，如果没有配置filter，则使用root配置 -->
 
     <!--这个和多环境中配置一块存在的时候,就会在这个基础上加上环境中配置的,没有环境时配置这个,有环境的话,在环境里面指明root-->
-   <!-- <root level="${log.level}">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="DEBUG_FILE"/>
-        <appender-ref ref="INFO_FILE"/>
-        <appender-ref ref="ERROR_FILE"/>
-        <appender-ref ref="WARN_FILE"/>
-    </root>-->
+    <!-- <root level="${log.level}">
+         <appender-ref ref="CONSOLE"/>
+         <appender-ref ref="DEBUG_FILE"/>
+         <appender-ref ref="INFO_FILE"/>
+         <appender-ref ref="ERROR_FILE"/>
+         <appender-ref ref="WARN_FILE"/>
+     </root>-->
 
     <!-- 4.1 开发环境:打印控制台-->
     <springProfile name="dev">

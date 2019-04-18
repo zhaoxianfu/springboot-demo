@@ -2,6 +2,7 @@ package com.redis.demo.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,8 @@ import javax.sql.DataSource;
  * @Date:Created 2019/4/15  19:47
  * @Version1.0
  **/
+
+@Slf4j
 @Configuration
 public class MybatisPlusConfig {
 
@@ -38,4 +41,5 @@ public class MybatisPlusConfig {
     public DataSource dataSource() {
         return new DruidDataSource();
     }
+
 }

@@ -1,5 +1,7 @@
 package com.redis.demo.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @ClassName:RedisKeyUtil
  * @Despriction: redis的key工具类
@@ -7,6 +9,8 @@ package com.redis.demo.util;
  * @Date:Created 2019/3/27  17:22
  * @Version1.0
  **/
+
+@Slf4j
 public class RedisKeyUtil {
     /**
      * redis的key

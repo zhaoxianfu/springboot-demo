@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
  * @Date:Created 2019/4/1  11:13
  * @Version1.0
  **/
+
 @Slf4j
 @Component
 public class TestTask {

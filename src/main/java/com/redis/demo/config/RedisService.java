@@ -1,5 +1,6 @@
 package com.redis.demo.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,8 @@ import java.util.stream.Stream;
  * @Date:Created 2019/3/27  17:12
  * @Version1.0
  **/
+
+@Slf4j
 @Component
 public class RedisService {
 

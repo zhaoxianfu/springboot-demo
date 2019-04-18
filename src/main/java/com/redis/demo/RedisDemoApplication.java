@@ -19,6 +19,11 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * 服务的启动类
+ * @author zhaoxianfu
+ */
+
 @SpringBootApplication(scanBasePackages = {"com.redis.demo"})     //可以加载多个模块下的所有的bean
 @EnableSwagger2                                      //开启swagger文档
 @EnableCaching                                      //开启spring的缓存
@@ -31,7 +36,7 @@ public class RedisDemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RedisDemoApplication.class, args);
-        System.out.println("<<<<<<<<<<<<<<<<<<RedisDemoApplication启动成功>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<Application启动成功>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     @Bean

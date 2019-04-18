@@ -3,12 +3,12 @@ package com.redis.demo.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.redis.demo.properties.DataJedisProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
@@ -24,14 +24,14 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * @ClassName:RedisConfig
- * @Despriction:         reids 相关bean的配置
+ * @Despriction:         reids相关bean的配置
  * @Author:zhaoxianfu
  * @Date:Created 2019/3/27  15:30
  * @Version1.0
  **/
-@Configuration
-@EnableCaching      //开启缓存
+
 @Slf4j
+@Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Autowired

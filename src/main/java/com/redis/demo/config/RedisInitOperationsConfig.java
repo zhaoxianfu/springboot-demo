@@ -12,8 +12,9 @@ import org.springframework.data.redis.core.*;
  * @Date:Created 2019/3/27  18:04
  * @Version1.0
  **/
-@Configuration
+
 @Slf4j
+@Configuration
 public class RedisInitOperationsConfig {
 
     /**
