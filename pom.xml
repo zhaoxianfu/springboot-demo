@@ -214,6 +214,13 @@
             <version>${okhttp.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.rockylomo/rxlib -->
+        <dependency>
+            <groupId>com.github.rockylomo</groupId>
+            <artifactId>rxlib</artifactId>
+            <version>2.0</version>
+        </dependency>
+
         <!--测试启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

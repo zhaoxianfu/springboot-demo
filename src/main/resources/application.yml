@@ -137,8 +137,12 @@ spring:
 log:
   logAspect1:
     enabled: false
-
   logAspect2:
+    enabled: true
+
+  provider:
+    enabled: true
+  feign:
     enabled: true
 
 #配置用户登录拦截器注册不注册到容器中,设置可拔插的功能,自己控制这个bean是否注入到容器中,true为注入这个拦截器,值为空或者为false为不注入这个拦截器
