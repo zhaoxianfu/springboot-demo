@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * @ClassName:User
- * @Despriction: //TODO
+ * @Despriction:
  * @Author:zhaoxianfu
  * @Date:Created 2019/3/27  17:57
  * @Version1.0

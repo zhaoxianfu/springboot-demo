@@ -41,11 +41,25 @@ public class RestTemplateDemoTest {
 
         JSONObject parm = new JSONObject();
         parm.put("parm", "1234");
+
+        String jsonString = parm.toJSONString();
+        System.out.println(jsonString);
+        JSONObject jsonObject = JSONObject.parseObject(jsonString);
+        System.out.println(jsonObject.toJSONString());
+
         HttpEntity<JSONObject> entity = new HttpEntity<>(parm, headers); //这里放JSONObject--json对象或者json格式的string类型都可以,根据泛型去变
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 "http://localhost:8080/headerApi", HttpMethod.POST, entity, String.class);
+
+        String body = responseEntity.getBody();
+        System.out.println(body);
+
+        JSONObject parseObject = JSONObject.parseObject(body);
+        //这样就和给前端json字符串就一样的道理
         //这里放JSONObject, String 都可以。因为JSONObject返回的时候其实也就是string,只不过把json类型的字符串转为了json对象,相当于map格式,可以通过api获取属性值
+
+        //JSONObject对象里面放JSONObject,一层嵌套一层
     }
 
 }

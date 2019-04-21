@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName:MailProperties
- * @Despriction: //TODO
+ * @Despriction:
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/11  17:35
  * @Version1.0

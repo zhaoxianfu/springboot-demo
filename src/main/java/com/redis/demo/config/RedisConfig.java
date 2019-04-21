@@ -1,8 +1,5 @@
 package com.redis.demo.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redis.demo.properties.DataJedisProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +14,12 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * @ClassName:RedisConfig
- * @Despriction:         reids相关bean的配置
+ * @Despriction: reids相关bean的配置
  * @Author:zhaoxianfu
  * @Date:Created 2019/3/27  15:30
  * @Version1.0
@@ -65,6 +60,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 初始化重写spring缓存的缓存管理器-->将spring缓存使用redis进行缓存
+     *
      * @return
      */
     @Bean
@@ -83,6 +79,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      *
      * 创建jedis连接池配置类对象
      * redis是单进程和单线程的,是为了提前获取好连接,每次只能一个进行连接redis,提前连接好可以节省连接reidis的时间
+     *
      * @return
      */
     @Bean
@@ -98,16 +95,17 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 步骤二
      *
      * 创建jedis连接工厂类对象
+     *
      * @return
      */
     @Bean
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) {
         log.info("Create JedisConnectionFactory successful");
-        JedisConnectionFactory factory = new JedisConnectionFactory();
+
+        //设置连接池配置类对象----传入连接池的配置信息
+        JedisConnectionFactory factory = new JedisConnectionFactory(jedisPoolConfig);
 
 //        Jedis jedis = factory.getShardInfo().createResource();
-        //设置连接池配置类对象
-        factory.setPoolConfig(jedisPoolConfig);
         factory.setHostName(dataJedisProperties.getHost());
         factory.setPort(dataJedisProperties.getPort());
         factory.setTimeout(dataJedisProperties.getTimeout());
@@ -119,25 +117,23 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 步骤三
      *
      * RedisTemplate进行设置key和value的序列化方式,默认string类型是JDK的序列化方式
+     *
      * @param jedisConnectionFactory
      * @return
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory jedisConnectionFactory) {
-        //设置序列化
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
+
         // 配置redisTemplate
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        //RedisTemplate会自动初始化StringRedisSerializer，所以这里直接获取
+        RedisSerializer<String> stringSerializer = redisTemplate.getStringSerializer();
         redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        RedisSerializer stringSerializer = new StringRedisSerializer();
+        //设置字符串序列化器,这样Spring就会把Redis的key当作字符串处理了
         redisTemplate.setKeySerializer(stringSerializer); // key序列化
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer); // value序列化
+        redisTemplate.setValueSerializer(stringSerializer); // value序列化
         redisTemplate.setHashKeySerializer(stringSerializer); // Hash key序列化
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer); // Hash value序列化
+        redisTemplate.setHashValueSerializer(stringSerializer); // Hash value序列化
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
@@ -146,6 +142,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * 步骤四
      *
      * 初始化StringRedisTemplate
+     *
      * @param jedisConnectionFactory
      * @return
      */
@@ -154,11 +151,17 @@ public class RedisConfig extends CachingConfigurerSupport {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         //设置连接工厂对象
         stringRedisTemplate.setConnectionFactory(jedisConnectionFactory);
+
+        RedisSerializer<String> stringSerializer = stringRedisTemplate.getStringSerializer();
+        stringRedisTemplate.setKeySerializer(stringSerializer); // key序列化
+        stringRedisTemplate.setValueSerializer(stringSerializer); // value序列化
         return stringRedisTemplate;
     }
 
+
     /**
      * 使用redis作为spring缓存中间件时,当Redis发生异常时,打印日志,程序正常执行
+     *
      * @return
      */
     @Bean

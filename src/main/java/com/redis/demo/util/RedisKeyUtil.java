@@ -24,12 +24,12 @@ public class RedisKeyUtil {
      * @return
      */
     public static String getKeyWithColumn(String tableName,String majorKey,String majorKeyValue,String column){
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(tableName).append(":");
-        buffer.append(majorKey).append(":");
-        buffer.append(majorKeyValue).append(":");
-        buffer.append(column);
-        return buffer.toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(tableName).append(":");
+        stringBuffer.append(majorKey).append(":");
+        stringBuffer.append(majorKeyValue).append(":");
+        stringBuffer.append(column);
+        return stringBuffer.toString();
     }
     /**
      * redis的key
@@ -42,10 +42,10 @@ public class RedisKeyUtil {
      * @return
      */
     public static String getKey(String tableName,String majorKey,String majorKeyValue){
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(tableName).append(":");
-        buffer.append(majorKey).append(":");
-        buffer.append(majorKeyValue).append(":");
-        return buffer.toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(tableName).append(":");
+        stringBuffer.append(majorKey).append(":");
+        stringBuffer.append(majorKeyValue).append(":");
+        return stringBuffer.toString();
     }
 }

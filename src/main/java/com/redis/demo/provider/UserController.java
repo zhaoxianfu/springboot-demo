@@ -1,9 +1,10 @@
 package com.redis.demo.provider;
 
+import com.redis.demo.pojo.User;
 import com.redis.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@Controller
 @RequestMapping("user")
 public class UserController {
 
@@ -32,8 +32,14 @@ public class UserController {
      * @return userName
      */
     @RequestMapping("findUserNameByTel")
-    public String findUserNameByTel(@RequestParam("tel") String tel) {
-        return userService.findUserName(tel);
+    public ResponseEntity<User> findUserNameByTel(@RequestParam("tel") String tel) {
+        String userName = userService.findUserName(tel);
+        User user = new User();
+        user.setName(userName);
+        user.setAge(21);
+        user.setAddress("上海市浦东新区");
+        user.setUserName(userName);
+        return ResponseEntity.ok().body(user);
     }
 
 }

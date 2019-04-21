@@ -1,0 +1,11 @@
+${AnsiColor.GREEN}
+                         ________             ________           ________
+                        |\_____  \           |\   __  \         |\   __  \
+                         \|___/  /|          \ \  \|\  \        \ \  \|\  \
+                             /  / /           \ \   ____\        \ \   ____\
+                            /  /_/__           \ \  \___|         \ \  \___|
+                           |\________\          \ \__\             \ \__\
+                            \|_______|           \|__|              \|__|
+${AnsiColor.BLUE}
+::: Application Version :::   ${application.version}
+::: Spring Boot Version :::   v${spring-boot.version}

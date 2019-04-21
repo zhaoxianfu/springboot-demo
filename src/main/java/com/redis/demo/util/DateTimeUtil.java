@@ -470,18 +470,15 @@ public class DateTimeUtil {
      * @param maxDate
      */
     public static long getHourDifference(Date minDate, Date maxDate) {
-        long hour = (maxDate.getTime() - minDate.getTime()) / (60 * 60 * 1000);
-        return hour;
+        return (maxDate.getTime() - minDate.getTime()) / (60 * 60 * 1000);
     }
 
     public static long getMinuteDifference(Date minDate, Date maxDate) {
-        long minute = (maxDate.getTime() - minDate.getTime()) / (60 * 1000);
-        return minute;
+        return (maxDate.getTime() - minDate.getTime()) / (60 * 1000);
     }
 
     public static long getMillisecondDifference(Date minDate, Date maxDate) {
-        long millisecond = maxDate.getTime() - minDate.getTime();
-        return millisecond;
+        return maxDate.getTime() - minDate.getTime();
     }
 
     /**
@@ -541,10 +538,14 @@ public class DateTimeUtil {
      * @since [产品/模块版本](可选)
      */
     public static Date getMonthDateBefor(Date date, int amount) {
-        Calendar calendar = Calendar.getInstance(); // 得到日历
-        calendar.setTime(date);// 把当前时间赋给日历
-        calendar.add(Calendar.MONTH, amount); // 设置为前N月
-        return calendar.getTime(); // 得到前N月的时间
+        // 得到日历
+        Calendar calendar = Calendar.getInstance();
+        // 把当前时间赋给日历
+        calendar.setTime(date);
+        // 设置为前N月
+        calendar.add(Calendar.MONTH, amount);
+        // 得到前N月的时间
+        return calendar.getTime();
     }
 
     /**
@@ -558,10 +559,14 @@ public class DateTimeUtil {
      * @since [产品/模块版本](可选)
      */
     public static Date getDateTime(Date date, int amount) {
-        Calendar calendar = Calendar.getInstance(); // 得到日历
-        calendar.setTime(date);// 把当前时间赋给日历
-        calendar.add(Calendar.DATE, amount); // 设置为前N天
-        return calendar.getTime(); // 得到前N天的时间
+        // 得到日历
+        Calendar calendar = Calendar.getInstance();
+        // 把当前时间赋给日历
+        calendar.setTime(date);
+        // 设置为前N天
+        calendar.add(Calendar.DATE, amount);
+        // 得到前N天的时间
+        return calendar.getTime();
     }
 
     /**
@@ -580,7 +585,8 @@ public class DateTimeUtil {
         oldDate.setTime(date2);
         long timeNow = nowDate.getTimeInMillis();
         long timeOld = oldDate.getTimeInMillis();
-        long days = (timeNow - timeOld) / (1000 * 60 * 60 * 24);// 化为天
+        //转化为天
+        long days = (timeNow - timeOld) / (1000 * 60 * 60 * 24);
         return (int) days;
     }
 
@@ -610,9 +616,11 @@ public class DateTimeUtil {
         }
         String pattern = null;
         if (dateStr.length() < DEFAULT_TIME_PATTERN.length()) {
-            if (dateStr.indexOf("-") > 0) { // 2016-12-12或2016-12-12 12:34:56等等
+            // 2016-12-12或2016-12-12 12:34:56等等
+            if (dateStr.indexOf("-") > 0) {
                 String[] dateStrs = dateStr.split("-");
-                if (dateStrs.length == 3) { // 2016-12-12...
+                // 2016-12-12...
+                if (dateStrs.length == 3) {
                     String yyyy = dateStrs[0], mm = dateStrs[1], ddhh = dateStrs[2];
                     if (ddhh.length() < 3) {
                         pattern = ((yyyy.length() >= 4) ? "yyyy" : "yyyy".substring(0, yyyy.length())) + "-"
@@ -625,7 +633,8 @@ public class DateTimeUtil {
                         if (idx > 0) {
                             String hhmmss = ddhh.substring(idx + 1);
                             if (!"".equals(hhmmss)) {
-                                if (hhmmss.indexOf(":") > 0) { // 12:34或12:34:56
+                                // 12:34或12:34:56
+                                if (hhmmss.indexOf(":") > 0) {
                                     String[] dateStrsTmp = hhmmss.split(":");
                                     if (dateStrsTmp.length == 1) {
                                         String hh = dateStrsTmp[0];
@@ -646,12 +655,14 @@ public class DateTimeUtil {
                             }
                         }
                     }
-                } else if (dateStrs.length == 2) { // 2015-12
+                    // 2015-12
+                } else if (dateStrs.length == 2) {
                     String yyyy = dateStrs[0], mm = dateStrs[1];
                     pattern = ((yyyy.length() >= 4) ? "yyyy" : "yyyy".substring(0, yyyy.length())) + "-"
                             + ((mm.length() < 2) ? "M" : "MM");
                 }
-            } else if (dateStr.indexOf(":") > 0) { // 12:34或12:34:56
+                // 12:34或12:34:56
+            } else if (dateStr.indexOf(":") > 0) {
                 String[] dateStrs = dateStr.split(":");
                 if (dateStrs.length == 1) {
                     String hh = dateStrs[0];
@@ -664,9 +675,11 @@ public class DateTimeUtil {
                     pattern = ((hh.length() < 2) ? "H" : "HH") + ":" + ((mm.length() < 2) ? "m" : "mm") + ":"
                             + ((ss.length() < 2) ? "s" : "ss");
                 }
-            } else if (dateStr.matches("^[0-9]*$")) { // 20161212123456【2016-12-12 12:34:56】
+                // 20161212123456【2016-12-12 12:34:56】
+            } else if (dateStr.matches("^[0-9]*$")) {
                 int length = dateStr.length();
-                if (length > 3 && length < 15) { // 从年开始
+                // 从年开始
+                if (length > 3 && length < 15) {
                     pattern = "yyyyMMddHHmmss".substring(0, length);
                 }
             }

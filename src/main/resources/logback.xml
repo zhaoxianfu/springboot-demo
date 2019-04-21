@@ -8,9 +8,11 @@
     <!--引入默认的一些设置-->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <!--指明指定包路径下的日志级别信息,在root指定的日志级别加上这个包下级别下的日志文件-->
+    <!--指明指定包路径下的日志级别信息,在root指定的日志级别加上这个包下级别下的日志文件,
+    其实和在application.yml文件中进行配置文件夹下的日志级别一样的作用,都是可以的-->
     <!--web信息-->
-    <logger name="org.springframework.web" level="info"/>
+    <logger name="org.springframework.web" level="debug"/>
+    <!--<logger name="org.springframework" level="debug"/>-->
 
     <!--配置mybatis sql日志-->
     <logger name="com.redis.demo.dao" level="debug"/>

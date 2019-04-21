@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 
 /**
  * @ClassName:AsyncTaskTest
- * @Despriction: //TODO
+ * @Despriction:
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/1  11:21
  * @Version1.0

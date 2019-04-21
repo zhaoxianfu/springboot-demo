@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @ClassName:Student
- * @Despriction: //TODO
+ * @Despriction:
  * @Author:zhaoxianfu
  * @Date:Created 2019/3/31  20:36
  * @Version1.0

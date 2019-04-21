@@ -13,6 +13,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Method;
@@ -31,7 +33,7 @@ public class ProviderLog {
     /**
      * 切入点表达式
      */
-    @Pointcut("@within(org.springframework.stereotype.Controller)")
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)")
     public void log() {
     }
 
@@ -59,18 +61,34 @@ public class ProviderLog {
         // 2.3 拼装接口URL
         // 2.3.1 获取FeignURL
 
-        String url = "";
+        StringBuilder builder = new StringBuilder();
 
+        //只能获取方法上注解为RequestMapping或者GetMapping或者PostMapping上的方法请求路径
         Function<RequestMapping, String> reqMappingFunc = p -> String.join(",",
+                ArrayUtils.isNotEmpty(p.value()) ? p.value() : p.path());
+
+        Function<GetMapping, String> reqMappingFunc1 = p -> String.join(",",
+                ArrayUtils.isNotEmpty(p.value()) ? p.value() : p.path());
+
+        Function<PostMapping, String> reqMappingFunc2 = p -> String.join(",",
                 ArrayUtils.isNotEmpty(p.value()) ? p.value() : p.path());
 
         // 2.3.2 获取RequestMapping URL
         RequestMapping methodReqMapping = method.getAnnotation(RequestMapping.class);
+        GetMapping methodReqMapping1 = method.getAnnotation(GetMapping.class);
+        PostMapping methodReqMapping2 = method.getAnnotation(PostMapping.class);
+
         if (methodReqMapping != null) {
-            url += reqMappingFunc.apply(methodReqMapping);
+            builder.append(reqMappingFunc.apply(methodReqMapping));
+        }
+        if (methodReqMapping1 != null) {
+            builder.append(reqMappingFunc1.apply(methodReqMapping1));
+        }
+        if (methodReqMapping2 != null) {
+            builder.append(reqMappingFunc2.apply(methodReqMapping2));
         }
 
-        stringBuilder.append(String.format("Provider URL：\t\t%s", url + lineSeparator));
+        stringBuilder.append(String.format("Provider URL：\t\t%s", builder.toString() + lineSeparator));
         stringBuilder.append(String.format("Provider 入参:\t%s", JSON.toJSONString(joinPoint.getArgs()) + lineSeparator));
         try {
             Object r = onProcess(joinPoint, stringBuilder);

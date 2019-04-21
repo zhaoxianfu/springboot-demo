@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 /**
  * @ClassName:MybatisPlusConfig
- * @Despriction: //TODO
+ * @Despriction:
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/15  19:47
  * @Version1.0

@@ -1,7 +1,14 @@
+#设置服务的端口号
 server:
   port: 8080
 
+#设置banner显示的这个项目的版本号
+application:
+  version: v1.0.0.RELEASE
+
 spring:
+  application:
+    name: redis-demo
   #默认多环境属性文件配置
   profiles:
     active: dev
@@ -19,9 +26,9 @@ spring:
         max-active: 30       #最大激活连接数
         max-wait: -1         #-1代表不限制
         max-idle: 10         #最大空闲连接数
-        min-idle: 0          #最小空闲连接数
-    timeout: 1000           #等待时间
-    password:               #redis默认没有密码
+        min-idle: 5          #最小空闲连接数
+    timeout: 3000            #redis连接超时时间,单位毫秒
+    password:                #redis默认没有密码
 
   #数据源的相关配置
   datasource:
@@ -76,8 +83,8 @@ spring:
   #jackson配置
   jackson:
     #日期格式化
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+08
+    date-format: yyyy-MM-dd HH:mm:ss      #指明前端传入的这种格式的字符串转换为我们后端的Date类型或者前端传时间戳格式(毫秒值),网络传输时一般都是时间戳--比如我们内部服务之间调用,都是时间戳
+    time-zone: GMT+08                     #指明前后端转换日期的时区
     serialization:
       write-dates-as-timestamps: false
       #格式化输出
@@ -85,7 +92,8 @@ spring:
       #忽略无法转换的对象
       fail_on_empty_beans: false
       #设置空如何序列化
-    defaultPropertyInclusion: non_null
+    defaultPropertyInclusion: non_null    #设置这个可以返回给前端时不显示属性为空的属性,只显示存在数据的属性
+    serialization-inclusion: NON_NULL     #指的是对对象进行序列化的时候可以将属性为空的省略掉,不进行属性进行变成字符串
     deserialization:
       #允许对象忽略json中不存在的属性
       fail_on_unknown_properties: true
@@ -94,6 +102,13 @@ spring:
       allow_unquoted_control_chars: true
       #允许出现单引号
       allow_single_quotes: true
+
+#控制banner是否停用,在哪里显示
+      # * Banner.Mode.OFF:关闭;
+      # * Banner.Mode.CONSOLE:控制台输出，默认方式;
+      # * Banner.Mode.LOG:日志输出方式;
+  main:
+    banner-mode: 'CONSOLE'
 
   #mybatis的配置
   #mybatis:
@@ -133,6 +148,36 @@ spring:
 #    map-underscore-to-camel-case: true
 #    cache-enabled: true
 
+#============== kafka ===================
+kafka:
+  producer:
+    servers: 127.0.0.1:9092
+    retries: 0
+    batch:
+      size: 4096
+    linger: 1
+    buffer:
+      memory: 40960
+
+  consumer:
+    zookeeper:
+      connect: 127.0.0.1:2181
+    servers: 127.0.0.1:9092
+    enable:
+      auto:
+        commit: true
+    session:
+      timeout: 6000
+    auto:
+      commit:
+        interval: 100
+      offset:
+        reset: latest
+    topic: test
+    group:
+      id: test
+    concurrency: 10
+
 #切面进行日志管理,设置可进行拔插的功能, true为开启这个切面,值为空或者为false为不开启这个切面
 log:
   logAspect1:
@@ -162,7 +207,7 @@ mail:
   fromMail:
     sender: ${spring.mail.username}   #必须和我们发送方的邮箱号码一致
     ##接收邮件地址
-    receiver: zhaoxianfu1594@163.com
+    receiver: 1942529344@qq.com
 
 #端点的相关配置
 management:

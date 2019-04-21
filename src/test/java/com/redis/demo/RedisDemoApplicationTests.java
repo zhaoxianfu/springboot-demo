@@ -1,7 +1,7 @@
 package com.redis.demo;
 
-import com.redis.demo.config.RedisService;
 import com.redis.demo.pojo.User;
+import com.redis.demo.redis.RedisService;
 import com.redis.demo.util.RedisKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -10,10 +10,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringRunner;
+import redis.clients.jedis.Jedis;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class RedisDemoApplicationTests {
     /**
      * 对redis字符串类型数据操作
      */
-    @Resource
+    @Autowired
     private ValueOperations<String, Object> valueOperations;
 
     /**
@@ -89,6 +90,25 @@ public class RedisDemoApplicationTests {
     }
 
     /**
+     * 使用同一个连接进行多个操作,节省连接---使用SessionCallback进行
+     *
+     * @throws Exception
+     */
+    @Test
+    public void useOneConnectionOpt() throws Exception {
+        //可以在同一条连接下执行多个Redis命令
+        redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                //下面两个操作使用的是同一个连接进行的操作----如果不使用SessionCallback的话,就会分别使用一个连接
+                operations.opsForValue().set("key1", "加油");
+                operations.opsForHash().put("hash", "filed1", "加油");
+                return null;
+            }
+        });
+    }
+
+    /**
      * 获取操作的模板类对象-->通过已经通过操作模板类对象获取的各种类型的操作对象来获取这个操作模板类对象
      *
      * @throws Exception
@@ -100,13 +120,13 @@ public class RedisDemoApplicationTests {
         RedisOperations<String, ?> redisOperations = hashOperations.getOperations();
         boolean flag = redisOperations instanceof RedisTemplate;
 
-        log.info("redisOperations对象是RedisTemplate产生的吗?---->{}",flag);   //True
+        log.info("redisOperations对象是RedisTemplate产生的吗?---->{}", flag);   //True
     }
 
     /**
      * valueOperations
      * set方法进行设置key的数据
-     *
+     * <p>
      * set方法会重置之前里面的数据(如果之前存在key)--->类似与map中的put方法
      * set的时候不设置过期时间,默认是永久进行存储的----需要设置过期时间才会设置
      * setIfAbsent如果不存在就设置数据
@@ -127,6 +147,25 @@ public class RedisDemoApplicationTests {
         operations.set(key, user, 10, TimeUnit.MINUTES);
 
         log.info("存入的user的信息为{}", user);
+    }
+
+    /**
+     * 减操作 ---redisTemplate上是不支持,所以需要原生的jedis进行支持
+     *
+     * @throws Exception
+     */
+    @Test
+    public void decrOperation() throws Exception {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+
+        valueOperations.set("key", "1");
+
+        valueOperations.increment("key",1);
+
+        Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
+
+        //减1操作
+        jedis.decr("key");
     }
 
     /**
@@ -163,7 +202,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 往一个key为list的集合中左边添加一个元素
+     * 往一个value为list的集合中左边添加一个元素
      *
      * @throws Exception
      */
@@ -174,7 +213,7 @@ public class RedisDemoApplicationTests {
         User.setName("jantent");
         User.setAge(22);
 
-        //在kry为list:user的list元素对象的左边添加值,就是序号最小添加
+        //在key为list:user的list元素对象的左边添加值,就是序号最小添加
         listOperations.leftPush("list:user", User);
 
         //获取key为list:user的值list集合对象的第一个元素的值
@@ -185,7 +224,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 往一个key为list的集合中获取list集合索引下具体一个元素的值
+     * 往一个value为list的集合中获取list集合索引下具体一个元素的值
      *
      * @throws Exception
      */
@@ -198,7 +237,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 往一个key为list的集合中对list集合下一个索引下元素重新赋值
+     * 往一个value为list的集合中对list集合下一个索引下元素重新赋值
      *
      * @throws Exception
      */
@@ -212,7 +251,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 获取这个Key下的lsit集合对象的数量
+     * 获取这个value下的lsit集合对象的数量
      *
      * @throws Exception
      */
@@ -225,7 +264,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 获取这个key的list集合中一定范围的list对象信息
+     * 获取这个value的list集合中一定范围的list对象信息
      *
      * @throws Exception
      */
@@ -241,7 +280,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 获取这个key的list集合所有元素对象
+     * 获取这个value的list集合所有元素对象
      *
      * @throws Exception
      */
@@ -258,7 +297,7 @@ public class RedisDemoApplicationTests {
     /**
      * listOperations
      * <p>
-     * 移除这个key的list集合中的左边第一个元素
+     * 移除这个value的list集合中的左边第一个元素
      *
      * @throws Exception
      */
@@ -269,9 +308,9 @@ public class RedisDemoApplicationTests {
 
     /**
      * hashOperations
-     *
+     * <p>
      * 对hash的数据进行赋值操作
-     *
+     * <p>
      * key为这个map对象的key,hashKey为这个map对象中增加key和value的值
      *
      * @throws Exception
@@ -290,8 +329,9 @@ public class RedisDemoApplicationTests {
 
     /**
      * hashOperations
-     *
+     * <p>
      * 获取这个hash对象中的Key为"hash:user"的map对象
+     *
      * @throws Exception
      */
     @Test
@@ -302,8 +342,9 @@ public class RedisDemoApplicationTests {
 
     /**
      * hashOperations
-     *
+     * <p>
      * 获取这个hash对象中的key为"hash:user"的map对象中的所有的hashKey(set集合)
+     *
      * @throws Exception
      */
     @Test
@@ -314,18 +355,19 @@ public class RedisDemoApplicationTests {
 
     /**
      * hashOperations
-     *
+     * <p>
      * 直接往hash对象的key中直接增加一个map对象
+     *
      * @throws Exception
      */
     @Test
     public void HashOperationPutAll() throws Exception {
         Map<String, Object> hashMap = new HashMap<>();
-        hashMap.put("2",2424224);
-        hashMap.put("3","asfwegwfwegf");
-        hashMap.put("2wr","asgfwegfewsg");
+        hashMap.put("2", 2424224);
+        hashMap.put("3", "asfwegwfwegf");
+        hashMap.put("2wr", "asgfwegfewsg");
 
-        hashOperations.putAll("hash:mapValue:111",hashMap);
+        hashOperations.putAll("hash:mapValue:111", hashMap);
         System.out.println(hashOperations.entries("hash:mapValue:111"));
     }
 

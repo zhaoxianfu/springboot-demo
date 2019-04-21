@@ -2,7 +2,7 @@ package com.redis.demo.email;
 
 /**
  * @ClassName:MailService
- * @Despriction: //TODO
+ * @Despriction:
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/14  21:08
  * @Version1.0

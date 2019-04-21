@@ -21,9 +21,6 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-/**
- * Created by IntelliJ IDEA. User: za-wangxiaoming Date: 2017/8/16
- */
 @Slf4j
 @Aspect
 @Component

@@ -27,7 +27,9 @@ import java.io.File;
 @Slf4j
 public class MailServiceImpl implements MailService {
 
-    //thymeleaf模板的template模板引擎
+    /**
+     *thymeleaf模板的template模板引擎
+     */
     @Autowired
     private TemplateEngine templateEngine;
 
