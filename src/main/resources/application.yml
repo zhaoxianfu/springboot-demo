@@ -16,6 +16,17 @@ spring:
   aop:
     auto: true
 
+  #缓存配置-->1.会根据配置文件自动帮我们创建RedisCacheManager作为spring的缓存管理器
+  #          2.或者自定义创建RedisCacheManager,放到容器中
+#  cache:
+#    cache-names: redisCache      #配置缓存名称,多个名称可以使用逗号分隔,以便于缓存注解中引用---->这个也会作为key的前缀，再加上声明的前缀,再加上方法上声明的前缀
+#    type: REDIS                  #缓存类型,在默认的情况下,spring会自动根据上下文推测,自动帮我们创建RedisCacheManager作为spring的缓存管理器
+#    redis:
+#      cache-null-values: true    #允许redis缓存空值
+#      key-prefix: redis110         #redis缓存的键前缀
+#      use-key-prefix: true       #是否启用redis的键前缀     启用的话是cache-name:key-prefix:方法上定义的key,设置为false的话,只启用方法上定义的key
+#      time-to-live: 600000          #缓存的超时时间戳,配置为0则不设置超时时间
+
   #redis的相关配置
   redis:
     database: 0           #redis操作的数据库,从0-15,我们这里选择0

@@ -15,10 +15,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.Jedis;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -87,6 +84,74 @@ public class RedisDemoApplicationTests {
     public void afterMethod() {
         log.info("------------------------------------------->");
         log.info("Redis的测试方法已结束");
+    }
+
+    /**
+     * redis上的事务-->如果监控的值发生变化了,那就会取消事务,不执行了,
+     * <p>
+     * Redis事务和数据库事务的不一样,对于 Redis事务是先让命令进入队列,所以一开始它并没有检测这个加一命令是否能够成功,
+     * 只有在exec命令执行的时候,才能发现错误,对于出错的命令 Redis只是报出错误,而错误后面的命令依旧被 行,所以key2和 ey3都存在数据,这就是Redis事务的特点,也是使用Redis事务需要特别注意的地方。
+     * 为了克服这个问题,一般我们要在执行 Redis 事务前,严格地检查数据,以避免这样的情况发生.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testRedisTransation() throws Exception {
+        //首先在key上设值为key1
+        redisTemplate.opsForValue().set("keyl", "value1");
+
+        //可以在同一条连接下执行多个Redis命令
+        redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+
+                //设置监控key1
+                operations.watch("key1");
+                //开启事务,在exec命令开始前,全部都只是进入对列,而不是真正的去执行
+                operations.multi();
+                operations.opsForValue().set("key2", "value2");
+
+                operations.opsForValue().increment("key1", 1);
+
+                //获取的值姜维null,因为Redis只是把命令放入了队列中
+                Object key2 = operations.opsForValue().get("key2");
+                System.out.println(key2);
+
+                operations.opsForValue().set("key3", "value3");
+                Object key3 = operations.opsForValue().get("key3");
+                System.out.println(key3);
+
+                //执行exec命令,将先判别监控的key1在watch到exec之间有没有被修改过,如果修改过,就不执行Redis里面的事务内的命令,否则执行事务
+                return operations.exec();
+            }
+        });
+    }
+
+    /**
+     * redis流水线操作-->同时执行很多命令
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testExecutePipelined() throws Exception {
+        Long start = System.currentTimeMillis();
+        List list = (List) redisTemplate.executePipelined(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                for (int i = 0; i < 10000; i++) {
+                    operations.opsForValue().set("pipeline" + i, "value" + i);
+                    String s = (String) operations.opsForValue().get("pipeline" + i);
+                    if (10000 == i) {
+                        log.info("命令全部进入了队列中");
+                    }
+                }
+                return null;
+            }
+
+        });
+        log.info("执行的所有数据为一个List:"+list.toString());
+        Long end = System.currentTimeMillis();
+        log.info("耗时:" + (end - start) + "毫秒");
     }
 
     /**
@@ -160,7 +225,7 @@ public class RedisDemoApplicationTests {
 
         valueOperations.set("key", "1");
 
-        valueOperations.increment("key",1);
+        valueOperations.increment("key", 1);
 
         Jedis jedis = (Jedis) redisTemplate.getConnectionFactory().getConnection().getNativeConnection();
 

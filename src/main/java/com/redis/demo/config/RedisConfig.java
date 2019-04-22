@@ -10,12 +10,18 @@ import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.time.Duration;
 
 /**
  * @ClassName:RedisConfig
@@ -66,17 +72,41 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Bean
     @Override
     public CacheManager cacheManager() {
-        // 初始化缓存管理器，在这里我们可以缓存的整体过期时间什么的，我这里默认没有配置
-        log.info("初始化 -> [{}]", "CacheManager RedisCacheManager Start");
-        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager
-                .RedisCacheManagerBuilder
-                .fromConnectionFactory(jedisConnectionFactory);
-        return builder.build();
+        // 初始化缓存管理器,在这里我们可以缓存的整体过期时间什么的
+        log.info("初始化RedisCacheManager缓存管理器 ------> [{}]", "Init RedisCacheManager");
+
+        //redis加锁的写入器
+        RedisCacheWriter redisCacheWriter = RedisCacheWriter.lockingRedisCacheWriter(jedisConnectionFactory);
+
+        //启动redis缓存的默认配置
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
+        //设置JDK序列化器
+        config = config.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new JdkSerializationRedisSerializer()));
+
+        //使用前缀
+        config.usePrefix();
+        log.info("spring缓存中缓存key使用前缀追加");
+
+        //设置key的前缀
+        config.prefixKeysWith("redis110");
+        log.info("设置spring缓存的key前缀为redis110");
+
+        //设置10分钟超时
+        config.entryTtl(Duration.ofMinutes(10));
+
+        log.info("设置spring缓存的超时时间为{}",Duration.ofMinutes(10));
+        //设置cacheName集合,缓存的前缀由cacheName:前缀:方法上定义的key
+        String[] cacheNameArray = {"redisCache"};
+
+        log.info("创建redisCacheManager上的所有的cacheName为{}",cacheNameArray);
+        //创建缓存redisCacheManager缓存管理器
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheWriter, config, cacheNameArray);
+        return redisCacheManager;
     }
 
     /**
      * 步骤一
-     *
+     * <p>
      * 创建jedis连接池配置类对象
      * redis是单进程和单线程的,是为了提前获取好连接,每次只能一个进行连接redis,提前连接好可以节省连接reidis的时间
      *
@@ -93,7 +123,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 步骤二
-     *
+     * <p>
      * 创建jedis连接工厂类对象
      *
      * @return
@@ -115,7 +145,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 步骤三
-     *
+     * <p>
      * RedisTemplate进行设置key和value的序列化方式,默认string类型是JDK的序列化方式
      *
      * @param jedisConnectionFactory
@@ -140,7 +170,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 步骤四
-     *
+     * <p>
      * 初始化StringRedisTemplate
      *
      * @param jedisConnectionFactory
