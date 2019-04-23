@@ -13,6 +13,7 @@ import java.util.Map;
  * @Date:Created 2019/4/18  15:24
  * @Version1.0
  **/
+
 public class ResultBase<T> implements Serializable {
     private static final long serialVersionUID = -5618198094661572939L;
 
@@ -157,6 +158,19 @@ public class ResultBase<T> implements Serializable {
 
     public void setReality(boolean reality) {
         this.reality = reality;
+    }
+
+    @Override
+    public String toString() {
+        return "ResultBase{" +
+                "isSuccess=" + isSuccess +
+                ", code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
+                ", value=" + value +
+                ", trackId='" + trackId + '\'' +
+                ", reality=" + reality +
+                ", additionalInfo=" + additionalInfo +
+                '}';
     }
 
 }
