@@ -10,8 +10,12 @@ spring:
   application:
     name: redis-demo
 
-#在传入的不是json格式的情况下(表单情况下)将前端传入的日期格式转换为后端的Date类型
+  #在传入的不是json格式的情况下(表单情况下)将前端传入的日期格式转换为后端的Date类型
   mvc:
+    #配置视图解析的前缀
+    view:
+      prefix: /templates/mail/
+      suffix: .html
     date-format: yyyy-MM-dd HH:mm:ss
 
   #默认多环境属性文件配置
@@ -23,14 +27,14 @@ spring:
 
   #缓存配置-->1.会根据配置文件自动帮我们创建RedisCacheManager作为spring的缓存管理器
   #          2.或者自定义创建RedisCacheManager,放到容器中
-#  cache:
-#    cache-names: redisCache      #配置缓存名称,多个名称可以使用逗号分隔,以便于缓存注解中引用---->这个也会作为key的前缀，再加上声明的前缀,再加上方法上声明的前缀
-#    type: REDIS                  #缓存类型,在默认的情况下,spring会自动根据上下文推测,自动帮我们创建RedisCacheManager作为spring的缓存管理器
-#    redis:
-#      cache-null-values: true    #允许redis缓存空值
-#      key-prefix: redis110         #redis缓存的键前缀
-#      use-key-prefix: true       #是否启用redis的键前缀     启用的话是cache-name:key-prefix:方法上定义的key,设置为false的话,只启用方法上定义的key
-#      time-to-live: 600000          #缓存的超时时间戳,配置为0则不设置超时时间
+  #  cache:
+  #    cache-names: redisCache      #配置缓存名称,多个名称可以使用逗号分隔,以便于缓存注解中引用---->这个也会作为key的前缀，再加上声明的前缀,再加上方法上声明的前缀
+  #    type: REDIS                  #缓存类型,在默认的情况下,spring会自动根据上下文推测,自动帮我们创建RedisCacheManager作为spring的缓存管理器
+  #    redis:
+  #      cache-null-values: true    #允许redis缓存空值
+  #      key-prefix: redis110         #redis缓存的键前缀
+  #      use-key-prefix: true       #是否启用redis的键前缀     启用的话是cache-name:key-prefix:方法上定义的key,设置为false的话,只启用方法上定义的key
+  #      time-to-live: 600000          #缓存的超时时间戳,配置为0则不设置超时时间
 
   #redis的相关配置
   redis:
@@ -119,7 +123,7 @@ spring:
       #允许出现单引号
       allow_single_quotes: true
 
-#控制banner是否停用,在哪里显示
+      #控制banner是否停用,在哪里显示
       # * Banner.Mode.OFF:关闭;
       # * Banner.Mode.CONSOLE:控制台输出，默认方式;
       # * Banner.Mode.LOG:日志输出方式;
@@ -235,10 +239,26 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"           #开放所有的端点进行可以进行访问
+        include: "*"           #开放所有的端点进行可以进行访问,默认只开放health和info接口
   endpoint:
-    health:
-      show-details: always     #调用health端点的时候显示所有的健康信息(包括redis等其他的一些)
+    health:                    #actuator的health端点默认提供一些常用的指标项---关于数据库和rabbitMq,MongoDB,Redis等
+      show-details: always     #调用health端点的时候显示所有的健康信息(包括redis等其他的一些),默认为never,从不展示提供过的健康项
+    shutdown:
+      enabled: true            #开启shutdown端点
+  health:                                        #当health端点所有的监控项为UP时,这个服务显示的状态才为UP
+    defaults:
+      enabled: true                              #默认为true时开启health端点监控的所有的监控项,改为false时则关闭health端点监控的所有的监控项
+    rabbit:
+      enabled: false                             #health端点监控时去掉RabbitMQ这个监控项
+    status:
+      order: DOWN,OUT_OF_SERVICE,UP,UNKNOWN      #健康指标根据严重级别进行排序,严重的排到最上面---依次为下线,不再提供服务,启动,未知
+  info:
+    git:
+      mode: full                    #使用info端点时显示通过插件产生的git.properties里面git详细的版本信息
+
+info:                               #使用info端点时显示info级下的所有的属性信息,也可以显示通过插件产生的git版本信息
+  zhongan:
+    name: 赵宪福
 
 #全局的负载均衡配置，配置所有的服务提供端的负载均衡策略(按照什么去调用集群的多个服务)，值为IRule的实现类，默认情况为轮询方式。
 ribbon:                       #配置对同一个服务不同实例的负载均衡

@@ -289,6 +289,23 @@
                 </configuration>
             </plugin>
 
+            <!--该插件用来产生git版本信息,产生在target/classes里面的git.properties的Git提交版本信息,然后就可以通过info端点进行查看了-->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.1.15</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
