@@ -9,6 +9,11 @@ application:
 spring:
   application:
     name: redis-demo
+
+#在传入的不是json格式的情况下(表单情况下)将前端传入的日期格式转换为后端的Date类型
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+
   #默认多环境属性文件配置
   profiles:
     active: dev

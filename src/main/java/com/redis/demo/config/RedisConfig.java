@@ -85,7 +85,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
         //使用前缀
         config.usePrefix();
-        log.info("spring缓存中缓存key使用前缀追加");
+        log.info("spring缓存中缓存key使用追加前缀");
 
         //设置key的前缀
         config.prefixKeysWith("redis110");
