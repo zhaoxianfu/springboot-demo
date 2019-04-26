@@ -10,13 +10,30 @@ spring:
   application:
     name: redis-demo
 
-  #在传入的不是json格式的情况下(表单情况下)将前端传入的日期格式转换为后端的Date类型
+#springMvc相关的配置信息
   mvc:
+    async:
+      request-timeout: 30000        #异步请求超时时间(单位为毫秒)
     #配置视图解析的前缀
     view:
       prefix: /templates/mail/
       suffix: .html
+      #在传入的不是json格式的情况下(表单情况下)将前端传入的日期格式转换为后端的Date类型
     date-format: yyyy-MM-dd HH:mm:ss
+    dispatch-options-request: true    #是否启用FrameworkServlet doService方法支持options请求
+    dispatch-trace-request: false     #是否启用FrameworkServlet doService方法支持trace请求
+    favicon:
+      enabled: true                   #springMVC的图标是否启用
+
+    log-resolved-exception: false     #是否启用警告日志异常解决
+    locale: Accept-Language           #默认国际化选项,默认Accept-Language
+    locale-resolver: accept_header    #国际化解析器,如果需要固定可以使用fixed
+    pathmatch:
+      use-suffix-pattern: false       #当匹配模式到请求时,是否启用后缀模式匹配(.*)
+    servlet:
+      load-on-startup: -1             #启用Spring Web服务Servlet的优先顺序配置
+    static-path-pattern: /**          #指定静态资源路径
+    throw-exception-if-no-handler-found: false        #如果请求找不到处理器,是否抛出noHandlerFoundException异常
 
   #默认多环境属性文件配置
   profiles:
@@ -124,11 +141,11 @@ spring:
       allow_single_quotes: true
 
       #控制banner是否停用,在哪里显示
-      # * Banner.Mode.OFF:关闭;
-      # * Banner.Mode.CONSOLE:控制台输出，默认方式;
-      # * Banner.Mode.LOG:日志输出方式;
+      # * banner-mode= 'off'关闭;
+      # * banner-mode= 'console'控制台输出，默认方式;
+      # * banner-mode= 'log' 日志输出方式;
   main:
-    banner-mode: 'CONSOLE'
+    banner-mode: 'console'
 
   #mybatis的配置
   #mybatis:
@@ -243,8 +260,9 @@ management:
   endpoint:
     health:                    #actuator的health端点默认提供一些常用的指标项---关于数据库和rabbitMq,MongoDB,Redis等
       show-details: always     #调用health端点的时候显示所有的健康信息(包括redis等其他的一些),默认为never,从不展示提供过的健康项
+
     shutdown:
-      enabled: true            #开启shutdown端点
+      enabled: false            #开启shutdown端点          默认是关闭的,并且只有post请求才能调用,其他的端点都是get请求
   health:                                        #当health端点所有的监控项为UP时,这个服务显示的状态才为UP
     defaults:
       enabled: true                              #默认为true时开启health端点监控的所有的监控项,改为false时则关闭health端点监控的所有的监控项
