@@ -243,6 +243,19 @@
             <version>2.0</version>
         </dependency>
 
+        <!--springMVC渲染为PDF时使用,为了实现springmvc中的buildPdfDocument抽象方法-->
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>core-renderer</artifactId>
+            <version>R8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13</version>
+        </dependency>
+
+
         <!--测试启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

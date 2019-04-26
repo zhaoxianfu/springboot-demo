@@ -4,9 +4,12 @@ import com.redis.demo.annotation.LogAnnotation;
 import com.redis.demo.annotation.OperationLogDetail;
 import com.redis.demo.enums.OperationTypeEnum;
 import com.redis.demo.enums.OperationUnitEnum;
+import com.redis.demo.pojo.User;
 import com.redis.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @ClassName:UserServiceImpl
@@ -30,5 +33,10 @@ public class UserServiceImpl implements UserService {
     public String findUserName(String tel) {
 
         return "赵宪福";
+    }
+
+    @Override
+    public List<User> findUsers(String userName, String note) {
+        return null;
     }
 }

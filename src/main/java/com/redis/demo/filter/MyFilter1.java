@@ -19,8 +19,8 @@ import java.io.IOException;
 
 @Slf4j
 @Order(1)
-@Component
-@WebFilter(filterName = "myFilter1", urlPatterns = "/*")
+@Component                 //这个注解可以将filter注册到容器中,没有放到容器的话,这个过滤器就没法生效
+@WebFilter(filterName = "myFilter1", urlPatterns = "/*")     //在这里指定filter的名称和拦截路径,注意这里指明bean对象的名称是在@webFilter上,而不是在@component上
 @ConditionalOnProperty(prefix = "filter.myFilter1", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class MyFilter1 implements Filter {
 
@@ -64,7 +64,6 @@ public class MyFilter1 implements Filter {
 
     /**
      * 过滤器销毁方法
-     *
      */
     @Override
     public void destroy() {

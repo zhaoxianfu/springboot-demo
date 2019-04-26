@@ -13,7 +13,7 @@ spring:
 #springMvc相关的配置信息
   mvc:
     async:
-      request-timeout: 30000        #异步请求超时时间(单位为毫秒)
+      request-timeout: 30000          #异步请求超时时间(单位为毫秒)
     #配置视图解析的前缀
     view:
       prefix: /templates/mail/
@@ -223,7 +223,7 @@ log:
     enabled: true
 
   provider:
-    enabled: true
+    enabled: false
   feign:
     enabled: true
 
@@ -287,6 +287,7 @@ ribbon:                       #配置对同一个服务不同实例的负载均�
   MaxAutoRetries: 2                 # 对当前服务实例的重试次数
   # 设置消费端熔断机制对的时间，当超过这个时间就会，就会断开请求服务，调用自己写的方法返回数据
   # 一般需要设置熔断机制的时间大于重试机制的时间
+
 hystrix:
   command:
     default:
@@ -299,4 +300,5 @@ hystrix:
 logging:
   config: classpath:logback.xml
   level:
-    root: info
+    root: info                    #声明全局的日志级别为info级别的进行打印,默认为info级别以上
+                                  #也可以单独指定一些包下的日志级别,比如指定mybatis下的日志为debug,那么打印出来的就为info加上mybatis包下的debug级别的日志

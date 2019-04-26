@@ -1,5 +1,9 @@
 package com.redis.demo.service;
 
+import com.redis.demo.pojo.User;
+
+import java.util.List;
+
 /**
  * @ClassName:UserService
  * @Despriction:
@@ -17,4 +21,6 @@ public interface UserService {
      * @return
      */
     String findUserName(String tel);
+
+    List<User> findUsers(String userName, String note);
 }
