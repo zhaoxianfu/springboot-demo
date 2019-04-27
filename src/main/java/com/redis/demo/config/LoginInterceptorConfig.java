@@ -12,6 +12,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * @ClassName:WebConfigurer
  * @Despriction: 配置静态资源和注册拦截器
+ *
+ * 对于多个拦截器,拦截同样请求路径下的controller的话,对于拦截器遵循先注册先执行的策略,而处理后方法和完成方法则是先注册后执行的规则
+ * 前置处理器方法会执行,但是一旦返回false,则后续的拦截器和处理器后的所有方法都不会执行,完成方法afterCompletion则不一样,只要
+ * 执行前方法返回了true,那么这个完成方法就会执行,而且是先注册后执行
+ * 比如:拦截器一前置方法返回true,拦截器二前置方法返回false
+ * 那么只会执行       拦截器一处理前方法   preHandle
+ *                   拦截器二处理前方法   preHandle
+ *                   拦截器一完成后方法   afterCompletion
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/18  11:15
  * @Version1.0
@@ -29,11 +37,15 @@ public class LoginInterceptorConfig implements WebMvcConfigurer {
     /**
      * 这个方法是用来配置静态资源的，比如html,js,css,等等
      *
+     * classpath:/static
+     * classpath:/public
+     * classpath:/resources
+     * classpath:/META-INF/resources
+     *
      * @param registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
     }
 
     /**

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <style type="text/css">
+        input {
+            line-height: 25px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div style="text-align: center; margin: 20%;">
+    <form action="toindex" method="post"
+          style="text-align: center; margin: 20%;">
+        <p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+
+        <label th:text="#{login.username}">用户名：</label>
+        <input type="text" name="username" th:placeholder="#{login.username}">
+        <br>
+        <label th:text="#{login.password}">密码：</label>
+        <input type="password" name="password" th:placeholder="#{login.password}">
+        <br>
+        <button type="submit" style="width: 60px; height: 40px;margin-bottom: 20px;" th:text="#{login.btn}">登录</button>
+        <br>
+
+        <a href="?lang=zh_CN">中文</a>
+        <a href="?lang=en_US">English</a>
+    </form>
+
+</div>
+</body>
+</html>
