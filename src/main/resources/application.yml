@@ -1,8 +1,8 @@
-#\u8BBE\u7F6E\u670D\u52A1\u7684\u7AEF\u53E3\u53F7
+#设置服务的端口号
 server:
   port: 8080
 
-#\u8BBE\u7F6Ebanner\u663E\u793A\u7684\u8FD9\u4E2A\u9879\u76EE\u7684\u7248\u672C\u53F7
+#设置banner显示的这个项目的版本号
 application:
   version: v1.0.0.RELEASE
 
@@ -10,188 +10,189 @@ spring:
   application:
     name: redis-demo
 
-  #springMvc\u76F8\u5173\u7684\u914D\u7F6E\u4FE1\u606F
+  #springMvc相关的配置信息
   mvc:
     async:
-      request-timeout: 30000          #\u5F02\u6B65\u8BF7\u6C42\u8D85\u65F6\u65F6\u95F4(\u5355\u4F4D\u4E3A\u6BEB\u79D2)
-      #\u914D\u7F6E\u89C6\u56FE\u89E3\u6790\u7684\u524D\u7F00,\u5728thymeleaf\u5DF2\u7ECF\u914D\u7F6E
-      #    view:
-      #      prefix: /templates
-      #      suffix: .html
-      #\u5728\u4F20\u5165\u7684\u4E0D\u662Fjson\u683C\u5F0F\u7684\u60C5\u51B5\u4E0B(\u8868\u5355\u60C5\u51B5\u4E0B)\u5C06\u524D\u7AEF\u4F20\u5165\u7684\u65E5\u671F\u683C\u5F0F\u8F6C\u6362\u4E3A\u540E\u7AEF\u7684Date\u7C7B\u578B
+      request-timeout: 30000          #异步请求超时时间(单位为毫秒)
+      #配置视图解析的前缀,已经在thymeleaf上制定了
+      #view:
+      #prefix: /templates/mail/
+      #suffix: .html
+      #在传入的不是json格式的情况下(表单情况下)将前端传入的日期格式转换为后端的Date类型
     date-format: yyyy-MM-dd HH:mm:ss
-    dispatch-options-request: true    #\u662F\u5426\u542F\u7528FrameworkServlet doService\u65B9\u6CD5\u652F\u6301options\u8BF7\u6C42
-    dispatch-trace-request: false     #\u662F\u5426\u542F\u7528FrameworkServlet doService\u65B9\u6CD5\u652F\u6301trace\u8BF7\u6C42
+    dispatch-options-request: true    #是否启用FrameworkServlet doService方法支持options请求
+    dispatch-trace-request: false     #是否启用FrameworkServlet doService方法支持trace请求
     favicon:
-      enabled: true                   #springMVC\u7684\u56FE\u6807\u662F\u5426\u542F\u7528
-    local: Accept-Language            #\u9ED8\u8BA4\u56FD\u9645\u5316\u9009\u9879,\u9ED8\u8BA4Accept-Language
-    log-resolved-exception: false     #\u662F\u5426\u542F\u7528\u8B66\u544A\u65E5\u5FD7\u5F02\u5E38\u89E3\u51B3
-    pathmatch:
-      use-suffix-pattern: false       #\u5F53\u5339\u914D\u6A21\u5F0F\u5230\u8BF7\u6C42\u65F6,\u662F\u5426\u542F\u7528\u540E\u7F00\u6A21\u5F0F\u5339\u914D(.*)
-    servlet:
-      load-on-startup: -1             #\u542F\u7528Spring Web\u670D\u52A1Servlet\u7684\u4F18\u5148\u987A\u5E8F\u914D\u7F6E
-    static-path-pattern: /**          #\u6307\u5B9A\u9759\u6001\u8D44\u6E90\u8DEF\u5F84
-    throw-exception-if-no-handler-found: false        #\u5982\u679C\u8BF7\u6C42\u627E\u4E0D\u5230\u5904\u7406\u5668,\u662F\u5426\u629B\u51FAnoHandlerFoundException\u5F02\u5E38
+      enabled: true                   #springMVC的图标是否启用
 
-  #\u9ED8\u8BA4\u591A\u73AF\u5883\u5C5E\u6027\u6587\u4EF6\u914D\u7F6E
+    log-resolved-exception: false     #是否启用警告日志异常解决
+    pathmatch:
+      use-suffix-pattern: false       #当匹配模式到请求时,是否启用后缀模式匹配(.*)
+    servlet:
+      load-on-startup: -1             #启用Spring Web服务Servlet的优先顺序配置
+    static-path-pattern: /**          #指定静态资源路径
+    throw-exception-if-no-handler-found: false        #如果请求找不到处理器,是否抛出noHandlerFoundException异常
+
+  #默认多环境属性文件配置
   profiles:
     active: dev
-  #\u542F\u52A8aop\u914D\u7F6E
+  #启动aop配置
   aop:
     auto: true
 
-  #\u7F13\u5B58\u914D\u7F6E-->1.\u4F1A\u6839\u636E\u914D\u7F6E\u6587\u4EF6\u81EA\u52A8\u5E2E\u6211\u4EEC\u521B\u5EFARedisCacheManager\u4F5C\u4E3Aspring\u7684\u7F13\u5B58\u7BA1\u7406\u5668
-  #          2.\u6216\u8005\u81EA\u5B9A\u4E49\u521B\u5EFARedisCacheManager,\u653E\u5230\u5BB9\u5668\u4E2D
+  #缓存配置-->1.会根据配置文件自动帮我们创建RedisCacheManager作为spring的缓存管理器
+  #          2.或者自定义创建RedisCacheManager,放到容器中
   #  cache:
-  #    cache-names: redisCache      #\u914D\u7F6E\u7F13\u5B58\u540D\u79F0,\u591A\u4E2A\u540D\u79F0\u53EF\u4EE5\u4F7F\u7528\u9017\u53F7\u5206\u9694,\u4EE5\u4FBF\u4E8E\u7F13\u5B58\u6CE8\u89E3\u4E2D\u5F15\u7528---->\u8FD9\u4E2A\u4E5F\u4F1A\u4F5C\u4E3Akey\u7684\u524D\u7F00\uFF0C\u518D\u52A0\u4E0A\u58F0\u660E\u7684\u524D\u7F00,\u518D\u52A0\u4E0A\u65B9\u6CD5\u4E0A\u58F0\u660E\u7684\u524D\u7F00
-  #    type: REDIS                  #\u7F13\u5B58\u7C7B\u578B,\u5728\u9ED8\u8BA4\u7684\u60C5\u51B5\u4E0B,spring\u4F1A\u81EA\u52A8\u6839\u636E\u4E0A\u4E0B\u6587\u63A8\u6D4B,\u81EA\u52A8\u5E2E\u6211\u4EEC\u521B\u5EFARedisCacheManager\u4F5C\u4E3Aspring\u7684\u7F13\u5B58\u7BA1\u7406\u5668
+  #    cache-names: redisCache      #配置缓存名称,多个名称可以使用逗号分隔,以便于缓存注解中引用---->这个也会作为key的前缀，再加上声明的前缀,再加上方法上声明的前缀
+  #    type: REDIS                  #缓存类型,在默认的情况下,spring会自动根据上下文推测,自动帮我们创建RedisCacheManager作为spring的缓存管理器
   #    redis:
-  #      cache-null-values: true    #\u5141\u8BB8redis\u7F13\u5B58\u7A7A\u503C
-  #      key-prefix: redis110         #redis\u7F13\u5B58\u7684\u952E\u524D\u7F00
-  #      use-key-prefix: true       #\u662F\u5426\u542F\u7528redis\u7684\u952E\u524D\u7F00     \u542F\u7528\u7684\u8BDD\u662Fcache-name:key-prefix:\u65B9\u6CD5\u4E0A\u5B9A\u4E49\u7684key,\u8BBE\u7F6E\u4E3Afalse\u7684\u8BDD,\u53EA\u542F\u7528\u65B9\u6CD5\u4E0A\u5B9A\u4E49\u7684key
-  #      time-to-live: 600000          #\u7F13\u5B58\u7684\u8D85\u65F6\u65F6\u95F4\u6233,\u914D\u7F6E\u4E3A0\u5219\u4E0D\u8BBE\u7F6E\u8D85\u65F6\u65F6\u95F4
+  #      cache-null-values: true    #允许redis缓存空值
+  #      key-prefix: redis110         #redis缓存的键前缀
+  #      use-key-prefix: true       #是否启用redis的键前缀     启用的话是cache-name:key-prefix:方法上定义的key,设置为false的话,只启用方法上定义的key
+  #      time-to-live: 600000          #缓存的超时时间戳,配置为0则不设置超时时间
 
-  #redis\u7684\u76F8\u5173\u914D\u7F6E
+  #redis的相关配置
   redis:
-    database: 0           #redis\u64CD\u4F5C\u7684\u6570\u636E\u5E93,\u4ECE0-15,\u6211\u4EEC\u8FD9\u91CC\u9009\u62E90
-    host: 127.0.1         #redis\u7684\u5730\u5740
-    port: 6379            #redis\u7684\u7AEF\u53E3\u53F7
+    database: 0           #redis操作的数据库,从0-15,我们这里选择0
+    host: 127.0.1         #redis的地址
+    port: 6379            #redis的端口号
     jedis:
       pool:
-        max-active: 30       #\u6700\u5927\u6FC0\u6D3B\u8FDE\u63A5\u6570
-        max-wait: -1         #-1\u4EE3\u8868\u4E0D\u9650\u5236
-        max-idle: 10         #\u6700\u5927\u7A7A\u95F2\u8FDE\u63A5\u6570
-        min-idle: 5          #\u6700\u5C0F\u7A7A\u95F2\u8FDE\u63A5\u6570
-    timeout: 3000            #redis\u8FDE\u63A5\u8D85\u65F6\u65F6\u95F4,\u5355\u4F4D\u6BEB\u79D2
-    password:                #redis\u9ED8\u8BA4\u6CA1\u6709\u5BC6\u7801
+        max-active: 30       #最大激活连接数
+        max-wait: -1         #-1代表不限制
+        max-idle: 10         #最大空闲连接数
+        min-idle: 5          #最小空闲连接数
+    timeout: 3000            #redis连接超时时间,单位毫秒
+    password:                #redis默认没有密码
 
-  #\u6570\u636E\u6E90\u7684\u76F8\u5173\u914D\u7F6E
+  #数据源的相关配置
   datasource:
-    url: jdbc:mysql://localhost:3306/redis_demo?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true          #\u6570\u636E\u5E93\u7684\u8FDE\u63A5\u5730\u5740
-    driverclassname: com.mysql.cj.jdbc.Driver               #mysql\u6570\u636E\u5E93\u8FDE\u63A5\u9A71\u52A8
-    username: root                                          #\u7528\u6237\u540D
-    password: 123456                                        #\u5BC6\u7801
+    url: jdbc:mysql://localhost:3306/redis_demo?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true          #数据库的连接地址
+    driverclassname: com.mysql.cj.jdbc.Driver               #mysql数据库连接驱动
+    username: root                                          #用户名
+    password: 123456                                        #密码
 
-    ##########################  druid\u914D\u7F6E   ##########################
+    ##########################  druid配置   ##########################
     type: com.alibaba.druid.pool.DruidDataSource
     #druid_config
-    validation-query: "SELECT 'X' FROM DUAL"
-    max-wait: 10000 #\u6700\u5927\u5EFA\u7ACB\u8FDE\u63A5\u7B49\u5F85\u65F6\u95F4\u3002\u5982\u679C\u8D85\u8FC7\u6B64\u65F6\u95F4\u5C06\u63A5\u5230\u5F02\u5E38\u3002\u8BBE\u4E3A-1\u8868\u793A\u65E0\u9650\u5236
-    max-idle: 10 #\u6700\u5927\u7A7A\u95F2\u6570\uFF0C\u6570\u636E\u5E93\u8FDE\u63A5\u7684\u6700\u5927\u7A7A\u95F2\u65F6\u95F4\u3002\u8D85\u8FC7\u7A7A\u95F2\u65F6\u95F4\uFF0C\u6570\u636E\u5E93\u8FDE\u63A5\u5C06\u88AB\u91CA\u653E\u3002\u8BBE\u4E3A0\u8868\u793A\u65E0\u9650\u5236
-    min-idle: 5  #\u6700\u5C0F\u7A7A\u95F2\u8FDE\u63A5:\u8FDE\u63A5\u6C60\u4E2D\u5BB9\u8BB8\u4FDD\u6301\u7A7A\u95F2\u72B6\u6001\u7684\u6700\u5C0F\u8FDE\u63A5\u6570\u91CF,\u4F4E\u4E8E\u8FD9\u4E2A\u6570\u91CF\u5C06\u521B\u5EFA\u65B0\u7684\u8FDE\u63A5
-    max_active: 50   #\u8FDE\u63A5\u6C60\u7684\u6700\u5927\u6570\u636E\u5E93\u8FDE\u63A5\u6570\u3002\u8BBE\u4E3A0\u8868\u793A\u65E0\u9650\u5236
-    initial-size: 5  #\u521D\u59CB\u5316\u8FDE\u63A5:\u8FDE\u63A5\u6C60\u542F\u52A8\u65F6\u521B\u5EFA\u7684\u521D\u59CB\u5316\u8FDE\u63A5\u6570\u91CF
-    test-on-borrow: false
-    test-while-idle: true
-    remove_abandoned: true #\u8D85\u8FC7removeAbandonedTimeout\u65F6\u95F4\u540E\uFF0C\u662F\u5426\u8FDB \u884C\u6CA1\u7528\u8FDE\u63A5\uFF08\u5E9F\u5F03\uFF09\u7684\u56DE\u6536\uFF08\u9ED8\u8BA4\u4E3Afalse\uFF0C\u8C03\u6574\u4E3Atrue)
-    remove_abandoned_timeout: 180 #\u8D85\u8FC7\u65F6\u95F4\u9650\u5236\uFF0C\u56DE\u6536\u6CA1\u6709\u7528(\u5E9F\u5F03)\u7684\u8FDE\u63A5\uFF08\u9ED8\u8BA4\u4E3A 300\u79D2\uFF0C\u8C03\u6574\u4E3A180\uFF09
-    time-between-eviction-runs-millis: 18800
-    pool-prepared-statements: true
-    max-pool-prepared-statement-per-connection-size: 20
-    connection-properties: config.decrypt=true;druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-    filters: stat,wall,log4j2
+    druid:
+      validation-query: "SELECT 'X' FROM DUAL"
+      max-wait: 10000 #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制
+      max-idle: 10 #最大空闲数，数据库连接的最大空闲时间。超过空闲时间，数据库连接将被释放。设为0表示无限制
+      min-idle: 5  #最小空闲连接:连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接
+      max_active: 50   #连接池的最大数据库连接数。设为0表示无限制
+      initial-size: 5  #初始化连接:连接池启动时创建的初始化连接数量
+      test-on-borrow: false
+      test-while-idle: true
+      remove_abandoned: true #超过removeAbandonedTimeout时间后，是否进 行没用连接（废弃）的回收（默认为false，调整为true)
+      remove_abandoned_timeout: 180 #超过时间限制，回收没有用(废弃)的连接（默认为 300秒，调整为180）
+      time-between-eviction-runs-millis: 18800
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      connection-properties: config.decrypt=true;druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      filters: stat,wall,log4j2
 
-  #email\u7684\u76F8\u5173\u914D\u7F6E
+  #email的相关配置
   mail:
-    host: smtp.qq.com             #\u6839\u636E\u53D1\u4EF6\u4EBA\u7684\u90AE\u7BB1\u662F\u4EC0\u4E48\u90AE\u7BB1\u786E\u5B9A\u7684
+    host: smtp.qq.com             #根据发件人的邮箱是什么邮箱确定的
     port: 465
-    protocol: smtp                #\u90AE\u7BB1\u53D1\u9001\u7684\u534F\u8BAE
+    protocol: smtp                #邮箱发送的协议
     properties:
       mail:
         smtp:
           connecttimeout: 5000
           timeout: 3000
           writetimeout: 5000
-          # \u8BBE\u7F6E\u662F\u5426\u9700\u8981\u8BA4\u8BC1,\u5982\u679C\u4E3Atrue,\u90A3\u4E48\u7528\u6237\u540D\u548C\u5BC6\u7801\u5C31\u5FC5\u987B\u7684
-          # \u5982\u679C\u8BBE\u7F6Efalse,\u53EF\u4EE5\u4E0D\u8BBE\u7F6E\u7528\u6237\u540D\u548C\u5BC6\u7801,\u5F53\u7136\u4E5F\u5F97\u770B\u4F60\u7684\u5BF9\u63A5\u7684\u5E73\u53F0\u662F\u5426\u652F\u6301\u65E0\u5BC6\u7801\u8FDB\u884C\u8BBF\u95EE\u7684\u3002
+          # 设置是否需要认证,如果为true,那么用户名和密码就必须的
+          # 如果设置false,可以不设置用户名和密码,当然也得看你的对接的平台是否支持无密码进行访问的。
           auth: true
           ssl:
-            enable: true           #\u662F\u5426\u7528\u542F\u7528\u52A0\u5BC6\u4F20\u9001\u7684\u534F\u8BAE\u9A8C\u8BC1\u9879
-          starttls:                # STARTTLS[1]\u662F\u5BF9\u7EAF\u6587\u672C\u901A\u4FE1\u534F\u8BAE\u7684\u6269\u5C55\u3002\u5B83\u63D0\u4F9B\u4E00\u79CD\u65B9\u5F0F\u5C06\u7EAF\u6587\u672C\u8FDE\u63A5\u5347\u7EA7\u4E3A\u52A0\u5BC6\u8FDE\u63A5\uFF08TLS\u6216SSL\uFF09,\u800C\u4E0D\u662F\u53E6\u5916\u4F7F\u7528\u4E00\u4E2A\u7AEF\u53E3\u4F5C\u52A0\u5BC6\u901A\u4FE1\u3002
+            enable: true           #是否用启用加密传送的协议验证项
+          starttls:                # STARTTLS[1]是对纯文本通信协议的扩展。它提供一种方式将纯文本连接升级为加密连接（TLS或SSL）,而不是另外使用一个端口作加密通信。
             enable: true
             required: true
-    default-encoding: UTF-8        #Default MimeMessage encoding\u7F16\u7801\u683C\u5F0F
-    username: 502162511@qq.com     #\u53D1\u9001\u65B9\u7684\u90AE\u7BB1\u53F7\u7801
-    password: ydrvmfixzudebjij     #\u6CE8\u610F\uFF1A\u5728spring.mail.password\u5904\u7684\u503C\u662F\u9700\u8981\u5728\u90AE\u7BB1\u8BBE\u7F6E\u91CC\u9762\u751F\u6210\u7684\u6388\u6743\u7801\uFF0C\u8FD9\u4E2A\u4E0D\u662F\u771F\u5B9E\u7684\u5BC6\u7801\u3002
+    default-encoding: UTF-8        #Default MimeMessage encoding编码格式
+    username: 502162511@qq.com     #发送方的邮箱号码
+    password: ydrvmfixzudebjij     #注意：在spring.mail.password处的值是需要在邮箱设置里面生成的授权码，这个不是真实的密码。
 
-  #jackson\u914D\u7F6E
+  #jackson配置
   jackson:
-    #\u65E5\u671F\u683C\u5F0F\u5316
-    date-format: yyyy-MM-dd HH:mm:ss      #\u6307\u660E\u524D\u7AEF\u4F20\u5165\u7684\u8FD9\u79CD\u683C\u5F0F\u7684\u5B57\u7B26\u4E32\u8F6C\u6362\u4E3A\u6211\u4EEC\u540E\u7AEF\u7684Date\u7C7B\u578B\u6216\u8005\u524D\u7AEF\u4F20\u65F6\u95F4\u6233\u683C\u5F0F(\u6BEB\u79D2\u503C),\u7F51\u7EDC\u4F20\u8F93\u65F6\u4E00\u822C\u90FD\u662F\u65F6\u95F4\u6233--\u6BD4\u5982\u6211\u4EEC\u5185\u90E8\u670D\u52A1\u4E4B\u95F4\u8C03\u7528,\u90FD\u662F\u65F6\u95F4\u6233
-    time-zone: GMT+08                     #\u6307\u660E\u524D\u540E\u7AEF\u8F6C\u6362\u65E5\u671F\u7684\u65F6\u533A
+    #日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss      #指明前端传入的这种格式的字符串转换为我们后端的Date类型或者前端传时间戳格式(毫秒值),网络传输时一般都是时间戳--比如我们内部服务之间调用,都是时间戳
+    time-zone: GMT+08                     #指明前后端转换日期的时区
     serialization:
       write-dates-as-timestamps: false
-      #\u683C\u5F0F\u5316\u8F93\u51FA
+      #格式化输出
       indent_output: true
-      #\u5FFD\u7565\u65E0\u6CD5\u8F6C\u6362\u7684\u5BF9\u8C61
+      #忽略无法转换的对象
       fail_on_empty_beans: false
-      #\u8BBE\u7F6E\u7A7A\u5982\u4F55\u5E8F\u5217\u5316
-    defaultPropertyInclusion: non_null    #\u8BBE\u7F6E\u8FD9\u4E2A\u53EF\u4EE5\u8FD4\u56DE\u7ED9\u524D\u7AEF\u65F6\u4E0D\u663E\u793A\u5C5E\u6027\u4E3A\u7A7A\u7684\u5C5E\u6027,\u53EA\u663E\u793A\u5B58\u5728\u6570\u636E\u7684\u5C5E\u6027
-    serialization-inclusion: NON_NULL     #\u6307\u7684\u662F\u5BF9\u5BF9\u8C61\u8FDB\u884C\u5E8F\u5217\u5316\u7684\u65F6\u5019\u53EF\u4EE5\u5C06\u5C5E\u6027\u4E3A\u7A7A\u7684\u7701\u7565\u6389,\u4E0D\u8FDB\u884C\u5C5E\u6027\u8FDB\u884C\u53D8\u6210\u5B57\u7B26\u4E32
+      #设置空如何序列化
+    defaultPropertyInclusion: non_null    #设置这个可以返回给前端时不显示属性为空的属性,只显示存在数据的属性
+    serialization-inclusion: NON_NULL     #指的是对对象进行序列化的时候可以将属性为空的省略掉,不进行属性进行变成字符串
     deserialization:
-      #\u5141\u8BB8\u5BF9\u8C61\u5FFD\u7565json\u4E2D\u4E0D\u5B58\u5728\u7684\u5C5E\u6027
+      #允许对象忽略json中不存在的属性
       fail_on_unknown_properties: true
     parser:
-      #\u5141\u8BB8\u51FA\u73B0\u7279\u6B8A\u5B57\u7B26\u548C\u8F6C\u4E49\u7B26
+      #允许出现特殊字符和转义符
       allow_unquoted_control_chars: true
-      #\u5141\u8BB8\u51FA\u73B0\u5355\u5F15\u53F7
+      #允许出现单引号
       allow_single_quotes: true
 
-      #\u63A7\u5236banner\u662F\u5426\u505C\u7528,\u5728\u54EA\u91CC\u663E\u793A
-      # * banner-mode= 'off'\u5173\u95ED;
-      # * banner-mode= 'console'\u63A7\u5236\u53F0\u8F93\u51FA\uFF0C\u9ED8\u8BA4\u65B9\u5F0F;
-      # * banner-mode= 'log' \u65E5\u5FD7\u8F93\u51FA\u65B9\u5F0F;
+      #控制banner是否停用,在哪里显示
+      # * banner-mode= 'off'关闭;
+      # * banner-mode= 'console'控制台输出，默认方式;
+      # * banner-mode= 'log' 日志输出方式;
   main:
     banner-mode: 'console'
 
-  #\u56FD\u9645\u5316\u914D\u7F6E---\u5B9A\u5236\u6D88\u606F\u6E90\u7684\u4F4D\u7F6E
-  messages:
-    always-use-message-format: false   #\u8BBE\u7F6E\u56FD\u9645\u5316\u6D88\u606F\u662F\u5426\u603B\u662F\u91C7\u7528\u683C\u5F0F\u5316,\u9ED8\u8BA4\u4E3Afalse
-    basename: i18n/login/login,i18n/index/index   #\u6307\u7684\u662F\u53EF\u4EE5\u8BFB\u53D6i18n\u6587\u4EF6\u4E0B\u7684login\u6587\u4EF6\u5939\u4E0B\u7684login\u524D\u7F00\u7684\u56FD\u9645\u5316\u6D88\u606F\u6E90\u7B49\u6587\u4EF6,\u771F\u6B63\u8BFB\u53D6\u8981\u770B\u91CC\u9762\u914D\u7F6E\u7684\u5C5E\u6027 #\u8BBE\u7F6E\u9ED8\u8BA4\u56FD\u9645\u5316\u5C5E\u6027\u540D\u79F0,\u5982\u679C\u6709\u591A\u4E2A\u53EF\u4EE5\u4F7F\u7528\u9017\u53F7\u9694\u5F00,\u9ED8\u8BA4\u4E3Amessages
-    cache-duration: 3600               #\u8BBE\u7F6E\u56FD\u9645\u5316\u6D88\u606F\u7F13\u5B58\u8D85\u65F6\u79D2\u6570,\u9ED8\u8BA4\u4E3A\u6C38\u4E0D\u8FC7\u671F,\u5982\u679C\u4E3A0\u7684\u8BDD\u8868\u793A\u6BCF\u6B21\u90FD\u8981\u91CD\u65B0\u52A0\u8F7D
-    encoding: utf-8                    #\u56FD\u9645\u5316\u6D88\u606F\u7F16\u7801
-    fallback-to-system-locale: true    #\u5982\u679C\u6CA1\u6709\u627E\u5230\u7279\u5B9A\u533A\u57DF\u8BBE\u7F6E\u7684\u6587\u4EF6,\u5219\u8BBE\u7F6E\u662F\u5426\u8FD4\u56DE\u5230\u7CFB\u7EDF\u533A\u57DF\u8BBE\u7F6E
-    use-code-as-default-message: false #\u662F\u5426\u4F7F\u7528\u6D88\u606F\u7F16\u7801\u4F5C\u4E3A\u9ED8\u8BA4\u7684\u54CD\u5E94\u6D88\u606F,\u800C\u975E\u629B\u51FANoSuchMessageException\u5F02\u5E38,\u53EA\u5EFA\u8BAE\u5728\u5F00\u53D1\u9636\u6BB5\u4F7F\u7528\u8BBE\u7F6E\u4E3Afalse
+  #国际化消息源的配置
+  message:
+    always-use-message-format: false
+    basename: i18n/login/login,i18n/index/index          #国际化消息源的文件位置,在i18n文件夹下的login文件夹下的login前缀的属性文件等
+    cache-duration: 3600
+    encoding: utf-8
+    fallback-to-system-locale: true
+    use-code-as-default-message: false
 
-  #thymeleaf\u914D\u7F6E
+  #thymeleaf的配置
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
 
-  #mybatis\u7684\u914D\u7F6E
+  #mybatis的配置
   #mybatis:
-  type-aliases-package: com.redis.demo.redisdemo.dataobject       #DO\u5BF9\u8C61\u522B\u540D
+  type-aliases-package: com.redis.demo.redisdemo.dataobject       #DO对象别名
   configuration:
-    map-underscore-to-camel-case: true                           #\u652F\u6301DO\u5BF9\u8C61\u5C5E\u6027\u548C\u6570\u636E\u5E93\u5B57\u6BB5\u9A7C\u5CF0\u6620\u5C04
+    map-underscore-to-camel-case: true                           #支持DO对象属性和数据库字段驼峰映射
   mapper-locations: classpath*:mappers/**/*Mapper.xml
   config:
-    log-impl: orh.apache.ibatis.logging.stdout.StdOutImpl        #\u8F93\u51FAsql\u6267\u884C\u8BED\u53E5
+    log-impl: orh.apache.ibatis.logging.stdout.StdOutImpl        #输出sql执行语句
 
-#mybatis-plus\u914D\u7F6E
+#mybatis-plus配置
 #mybatis-plus:
 #  mappers-locations: classpath*:mappers/**/*Mapper.xml
-#  #\u5B9E\u4F53\u626B\u63CF\uFF0C\u591A\u4E2Apackage\u7528\u9017\u53F7\u6216\u8005\u5206\u53F7\u5206\u9694
+#  #实体扫描，多个package用逗号或者分号分隔
 #  typeAliasesPackage: com.redis.demo.redisdemo.dataobject
 #  global-config:
-#    #\u4E3B\u952E\u7C7B\u578B  0:"\u6570\u636E\u5E93ID\u81EA\u589E", 1:"\u7528\u6237\u8F93\u5165ID",2:"\u5168\u5C40\u552F\u4E00ID (\u6570\u5B57\u7C7B\u578B\u552F\u4E00ID)", 3:"\u5168\u5C40\u552F\u4E00ID UUID";
+#    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
 #    id-type: 2
-#    #\u5B57\u6BB5\u7B56\u7565 0:"\u5FFD\u7565\u5224\u65AD",1:"\u975E NULL \u5224\u65AD"),2:"\u975E\u7A7A\u5224\u65AD"
+#    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
 #    field-strategy: 2
-#    #\u9A7C\u5CF0\u4E0B\u5212\u7EBF\u8F6C\u6362
+#    #驼峰下划线转换
 #    db-column-underline: true
-#    #\u5237\u65B0mapper \u8C03\u8BD5\u795E\u5668
+#    #刷新mapper 调试神器
 #    refresh-mappers: true
-#    #\u6570\u636E\u5E93\u5927\u5199\u4E0B\u5212\u7EBF\u8F6C\u6362
+#    #数据库大写下划线转换
 #    capital-mode: true
-#    #\u5E8F\u5217\u63A5\u53E3\u5B9E\u73B0\u7C7B\u914D\u7F6E
+#    #序列接口实现类配置
 #    #key-generator: com.baomidou.springboot.xxx
-#    #\u903B\u8F91\u5220\u9664\u914D\u7F6E\uFF08\u4E0B\u97623\u4E2A\u914D\u7F6E\uFF09
+#    #逻辑删除配置（下面3个配置）
 #    logic-delete-value: 0
 #    logic-not-delete-value: 1
-#    #\u81EA\u5B9A\u4E49SQL\u6CE8\u5165\u5668
+#    #自定义SQL注入器
 #    #sql-injector: com.baomidou.mybatisplus.mappers.LogicSqlInjector
-#    #\u81EA\u5B9A\u4E49\u586B\u5145\u7B56\u7565\u63A5\u53E3\u5B9E\u73B0
+#    #自定义填充策略接口实现
 #    #meta-object-handler: com.baomidou.springboot.xxx
 #  configuration:
 #    map-underscore-to-camel-case: true
@@ -227,7 +228,7 @@ kafka:
       id: test
     concurrency: 10
 
-#\u5207\u9762\u8FDB\u884C\u65E5\u5FD7\u7BA1\u7406,\u8BBE\u7F6E\u53EF\u8FDB\u884C\u62D4\u63D2\u7684\u529F\u80FD, true\u4E3A\u5F00\u542F\u8FD9\u4E2A\u5207\u9762,\u503C\u4E3A\u7A7A\u6216\u8005\u4E3Afalse\u4E3A\u4E0D\u5F00\u542F\u8FD9\u4E2A\u5207\u9762
+#切面进行日志管理,设置可进行拔插的功能, true为开启这个切面,值为空或者为false为不开启这个切面
 log:
   logAspect1:
     enabled: false
@@ -239,26 +240,26 @@ log:
   feign:
     enabled: true
 
-#\u914D\u7F6E\u7528\u6237\u767B\u5F55\u62E6\u622A\u5668\u6CE8\u518C\u4E0D\u6CE8\u518C\u5230\u5BB9\u5668\u4E2D,\u8BBE\u7F6E\u53EF\u62D4\u63D2\u7684\u529F\u80FD,\u81EA\u5DF1\u63A7\u5236\u8FD9\u4E2Abean\u662F\u5426\u6CE8\u5165\u5230\u5BB9\u5668\u4E2D,true\u4E3A\u6CE8\u5165\u8FD9\u4E2A\u62E6\u622A\u5668,\u503C\u4E3A\u7A7A\u6216\u8005\u4E3Afalse\u4E3A\u4E0D\u6CE8\u5165\u8FD9\u4E2A\u62E6\u622A\u5668
+#配置用户登录拦截器注册不注册到容器中,设置可拔插的功能,自己控制这个bean是否注入到容器中,true为注入这个拦截器,值为空或者为false为不注入这个拦截器
 interceptor:
   loginInterceptor:
     enabled: false
 
-#\u914D\u7F6E\u8FC7\u6EE4\u5668-->\u8BBE\u7F6E\u53EF\u8FDB\u884C\u62D4\u63D2\u7684\u529F\u80FD,\u81EA\u5DF1\u63A7\u5236\u8FD9\u4E2Abean\u662F\u5426\u6CE8\u5165\u5230\u5BB9\u5668\u4E2D,true\u4E3A\u6CE8\u5165\u8FD9\u4E2A\u8FC7\u6EE4\u5668,\u503C\u4E3A\u7A7A\u6216\u8005\u4E3Afalse\u4E3A\u4E0D\u6CE8\u5165\u8FD9\u4E2A\u8FC7\u6EE4\u5668
+#配置过滤器-->设置可进行拔插的功能,自己控制这个bean是否注入到容器中,true为注入这个过滤器,值为空或者为false为不注入这个过滤器
 filter:
   myFilter1:
     enabled: true
   myFilter2:
     enabled: true
 
-##\u53D1\u9001\u90AE\u4EF6\u5730\u5740
+##发送邮件地址
 mail:
   fromMail:
-    sender: ${spring.mail.username}   #\u5FC5\u987B\u548C\u6211\u4EEC\u53D1\u9001\u65B9\u7684\u90AE\u7BB1\u53F7\u7801\u4E00\u81F4
-    ##\u63A5\u6536\u90AE\u4EF6\u5730\u5740
+    sender: ${spring.mail.username}   #必须和我们发送方的邮箱号码一致
+    ##接收邮件地址
     receiver: 1942529344@qq.com
 
-#\u7AEF\u70B9\u7684\u76F8\u5173\u914D\u7F6E
+#端点的相关配置
 management:
   server:
     servlet:
@@ -268,37 +269,37 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"           #\u5F00\u653E\u6240\u6709\u7684\u7AEF\u70B9\u8FDB\u884C\u53EF\u4EE5\u8FDB\u884C\u8BBF\u95EE,\u9ED8\u8BA4\u53EA\u5F00\u653Ehealth\u548Cinfo\u63A5\u53E3
+        include: "*"           #开放所有的端点进行可以进行访问,默认只开放health和info接口
   endpoint:
-    health:                    #actuator\u7684health\u7AEF\u70B9\u9ED8\u8BA4\u63D0\u4F9B\u4E00\u4E9B\u5E38\u7528\u7684\u6307\u6807\u9879---\u5173\u4E8E\u6570\u636E\u5E93\u548CrabbitMq,MongoDB,Redis\u7B49
-      show-details: always     #\u8C03\u7528health\u7AEF\u70B9\u7684\u65F6\u5019\u663E\u793A\u6240\u6709\u7684\u5065\u5EB7\u4FE1\u606F(\u5305\u62ECredis\u7B49\u5176\u4ED6\u7684\u4E00\u4E9B),\u9ED8\u8BA4\u4E3Anever,\u4ECE\u4E0D\u5C55\u793A\u63D0\u4F9B\u8FC7\u7684\u5065\u5EB7\u9879
+    health:                    #actuator的health端点默认提供一些常用的指标项---关于数据库和rabbitMq,MongoDB,Redis等
+      show-details: always     #调用health端点的时候显示所有的健康信息(包括redis等其他的一些),默认为never,从不展示提供过的健康项
 
     shutdown:
-      enabled: false            #\u5F00\u542Fshutdown\u7AEF\u70B9          \u9ED8\u8BA4\u662F\u5173\u95ED\u7684,\u5E76\u4E14\u53EA\u6709post\u8BF7\u6C42\u624D\u80FD\u8C03\u7528,\u5176\u4ED6\u7684\u7AEF\u70B9\u90FD\u662Fget\u8BF7\u6C42
-  health:                                        #\u5F53health\u7AEF\u70B9\u6240\u6709\u7684\u76D1\u63A7\u9879\u4E3AUP\u65F6,\u8FD9\u4E2A\u670D\u52A1\u663E\u793A\u7684\u72B6\u6001\u624D\u4E3AUP
+      enabled: false            #开启shutdown端点          默认是关闭的,并且只有post请求才能调用,其他的端点都是get请求
+  health:                                        #当health端点所有的监控项为UP时,这个服务显示的状态才为UP
     defaults:
-      enabled: true                              #\u9ED8\u8BA4\u4E3Atrue\u65F6\u5F00\u542Fhealth\u7AEF\u70B9\u76D1\u63A7\u7684\u6240\u6709\u7684\u76D1\u63A7\u9879,\u6539\u4E3Afalse\u65F6\u5219\u5173\u95EDhealth\u7AEF\u70B9\u76D1\u63A7\u7684\u6240\u6709\u7684\u76D1\u63A7\u9879
+      enabled: true                              #默认为true时开启health端点监控的所有的监控项,改为false时则关闭health端点监控的所有的监控项
     rabbit:
-      enabled: false                             #health\u7AEF\u70B9\u76D1\u63A7\u65F6\u53BB\u6389RabbitMQ\u8FD9\u4E2A\u76D1\u63A7\u9879
+      enabled: false                             #health端点监控时去掉RabbitMQ这个监控项
     status:
-      order: DOWN,OUT_OF_SERVICE,UP,UNKNOWN      #\u5065\u5EB7\u6307\u6807\u6839\u636E\u4E25\u91CD\u7EA7\u522B\u8FDB\u884C\u6392\u5E8F,\u4E25\u91CD\u7684\u6392\u5230\u6700\u4E0A\u9762---\u4F9D\u6B21\u4E3A\u4E0B\u7EBF,\u4E0D\u518D\u63D0\u4F9B\u670D\u52A1,\u542F\u52A8,\u672A\u77E5
+      order: DOWN,OUT_OF_SERVICE,UP,UNKNOWN      #健康指标根据严重级别进行排序,严重的排到最上面---依次为下线,不再提供服务,启动,未知
   info:
     git:
-      mode: full                    #\u4F7F\u7528info\u7AEF\u70B9\u65F6\u663E\u793A\u901A\u8FC7\u63D2\u4EF6\u4EA7\u751F\u7684git.properties\u91CC\u9762git\u8BE6\u7EC6\u7684\u7248\u672C\u4FE1\u606F
+      mode: full                    #使用info端点时显示通过插件产生的git.properties里面git详细的版本信息
 
-info:                               #\u4F7F\u7528info\u7AEF\u70B9\u65F6\u663E\u793Ainfo\u7EA7\u4E0B\u7684\u6240\u6709\u7684\u5C5E\u6027\u4FE1\u606F,\u4E5F\u53EF\u4EE5\u663E\u793A\u901A\u8FC7\u63D2\u4EF6\u4EA7\u751F\u7684git\u7248\u672C\u4FE1\u606F
+info:                               #使用info端点时显示info级下的所有的属性信息,也可以显示通过插件产生的git版本信息
   zhongan:
-    name: \u8D75\u5BAA\u798F
+    name: 赵宪福
 
-#\u5168\u5C40\u7684\u8D1F\u8F7D\u5747\u8861\u914D\u7F6E\uFF0C\u914D\u7F6E\u6240\u6709\u7684\u670D\u52A1\u63D0\u4F9B\u7AEF\u7684\u8D1F\u8F7D\u5747\u8861\u7B56\u7565(\u6309\u7167\u4EC0\u4E48\u53BB\u8C03\u7528\u96C6\u7FA4\u7684\u591A\u4E2A\u670D\u52A1)\uFF0C\u503C\u4E3AIRule\u7684\u5B9E\u73B0\u7C7B\uFF0C\u9ED8\u8BA4\u60C5\u51B5\u4E3A\u8F6E\u8BE2\u65B9\u5F0F\u3002
-ribbon:                       #\u914D\u7F6E\u5BF9\u540C\u4E00\u4E2A\u670D\u52A1\u4E0D\u540C\u5B9E\u4F8B\u7684\u8D1F\u8F7D\u5747\u8861
-  ConnectTimeout: 250         #\u8FDE\u63A5\u8D85\u65F6\u65F6\u95F4(ms)
-  ReadTimeout: 2000           #\u901A\u4FE1\u8D85\u65F6\u65F6\u95F4(ms)
-  OkToRetryOnAllOperations: true    #\u662F\u5426\u5BF9\u6240\u6709\u64CD\u4F5C\u91CD\u8BD5
-  MaxAutoRetriesNextServer: 1       #\u540C\u4E00\u670D\u52A1\u5207\u6362\u5B9E\u4F8B\u7684\u91CD\u8BD5\u6B21\u6570
-  MaxAutoRetries: 2                 # \u5BF9\u5F53\u524D\u670D\u52A1\u5B9E\u4F8B\u7684\u91CD\u8BD5\u6B21\u6570
-  # \u8BBE\u7F6E\u6D88\u8D39\u7AEF\u7194\u65AD\u673A\u5236\u5BF9\u7684\u65F6\u95F4\uFF0C\u5F53\u8D85\u8FC7\u8FD9\u4E2A\u65F6\u95F4\u5C31\u4F1A\uFF0C\u5C31\u4F1A\u65AD\u5F00\u8BF7\u6C42\u670D\u52A1\uFF0C\u8C03\u7528\u81EA\u5DF1\u5199\u7684\u65B9\u6CD5\u8FD4\u56DE\u6570\u636E
-  # \u4E00\u822C\u9700\u8981\u8BBE\u7F6E\u7194\u65AD\u673A\u5236\u7684\u65F6\u95F4\u5927\u4E8E\u91CD\u8BD5\u673A\u5236\u7684\u65F6\u95F4
+#全局的负载均衡配置，配置所有的服务提供端的负载均衡策略(按照什么去调用集群的多个服务)，值为IRule的实现类，默认情况为轮询方式。
+ribbon:                       #配置对同一个服务不同实例的负载均衡
+  ConnectTimeout: 250         #连接超时时间(ms)
+  ReadTimeout: 2000           #通信超时时间(ms)
+  OkToRetryOnAllOperations: true    #是否对所有操作重试
+  MaxAutoRetriesNextServer: 1       #同一服务切换实例的重试次数
+  MaxAutoRetries: 2                 # 对当前服务实例的重试次数
+  # 设置消费端熔断机制对的时间，当超过这个时间就会，就会断开请求服务，调用自己写的方法返回数据
+  # 一般需要设置熔断机制的时间大于重试机制的时间
 
 hystrix:
   command:
@@ -306,11 +307,11 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMillisecond: 10000 # \u7194\u65AD\u8D85\u65F6\u65F6\u957F\uFF1A10s\uFF0C\u5F53\u8BF7\u6C42\u670D\u52A1\u8D85\u8FC710s\u8FD9\u4E2A\u65F6\u95F4\u5C31\u4F1A\u8FDB\u884C\u8C03\u7528\u7194\u65AD\u9700\u8981\u6267\u884C\u7684\u65B9\u6CD5,\u8FD9\u4E2A\u65F6\u95F4\u8981\u5927\u4E8E\u91CD\u8BD5\u673A\u5236\u7684Ribbon\u8FDE\u63A5\u8D85\u65F6\u65F6\u95F4
+            timeoutInMillisecond: 10000 # 熔断超时时长：10s，当请求服务超过10s这个时间就会进行调用熔断需要执行的方法,这个时间要大于重试机制的Ribbon连接超时时间
 
-#\u8BBE\u7F6E\u65E5\u5FD7\u7EA7\u522B---\u53EF\u4EE5\u9488\u5BF9\u4E00\u4E2A\u6587\u4EF6\u5939\u4E0B\u6307\u5B9A\u65E5\u5FD7\u7684\u7EA7\u522B,\u4E5F\u53EF\u4EE5\u5728logback.xml\u91CC\u9762\u914D\u7F6Eroot\u4E0B\u7684\u666E\u904D\u7684\u65E5\u5FD7\u7EA7\u522B,\u4E5F\u53EF\u4EE5\u5355\u72EC\u6307\u5B9A\u4E00\u4E2A\u5305\u4E0B\u7684\u65E5\u5FD7\u7EA7\u522B\u8FDB\u884C\u6253\u5370
+#设置日志级别---可以针对一个文件夹下指定日志的级别,也可以在logback.xml里面配置root下的普遍的日志级别,也可以单独指定一个包下的日志级别进行打印
 logging:
   config: classpath:logback.xml
   level:
-    root: info                    #\u58F0\u660E\u5168\u5C40\u7684\u65E5\u5FD7\u7EA7\u522B\u4E3Ainfo\u7EA7\u522B\u7684\u8FDB\u884C\u6253\u5370,\u9ED8\u8BA4\u4E3Ainfo\u7EA7\u522B\u4EE5\u4E0A
-    #\u4E5F\u53EF\u4EE5\u5355\u72EC\u6307\u5B9A\u4E00\u4E9B\u5305\u4E0B\u7684\u65E5\u5FD7\u7EA7\u522B,\u6BD4\u5982\u6307\u5B9Amybatis\u4E0B\u7684\u65E5\u5FD7\u4E3Adebug,\u90A3\u4E48\u6253\u5370\u51FA\u6765\u7684\u5C31\u4E3Ainfo\u52A0\u4E0Amybatis\u5305\u4E0B\u7684debug\u7EA7\u522B\u7684\u65E5\u5FD7
+    root: info                    #声明全局的日志级别为info级别的进行打印,默认为info级别以上
+    #也可以单独指定一些包下的日志级别,比如指定mybatis下的日志为debug,那么打印出来的就为info加上mybatis包下的debug级别的日志
