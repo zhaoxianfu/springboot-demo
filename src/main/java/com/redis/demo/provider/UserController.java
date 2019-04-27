@@ -5,9 +5,7 @@ import com.redis.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName:UserController
@@ -40,6 +38,49 @@ public class UserController {
         user.setAddress("上海市浦东新区");
         user.setUserName(userName);
         return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * 通过＠RequestHeader接收请求头参数,进而进行操作,@RequestHeader里面的tel属性赋值给形式参数tel
+     *
+     * @param tel
+     * @return
+     */
+    @PostMapping("header/user")
+    public ResponseEntity<User> headerUser(@RequestHeader("tel") String tel) {
+        String userName = userService.findUserName(tel);
+        User user = new User();
+        user.setName(userName);
+        user.setAge(21);
+        user.setAddress("上海市浦东新区");
+        user.setUserName(userName);
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * 通过@CookieValue接收cookie中的参数
+     *
+     * @param name
+     * @param age
+     * @return
+     */
+    @RequestMapping("/testCookie")
+    public String testCookie(@CookieValue(value = "name", required = false) String name,
+                             @CookieValue(value = "age", required = false) Integer age) {
+        System.out.println(name + "," + age);
+        return "hello";
+    }
+
+    /**
+     * 通过@SessionAttribute接收服务中session中的参数
+     *
+     * @param sessionStr
+     * @return
+     */
+    @RequestMapping("/testSessionAttributes")
+    public String testSessionAttributes(@SessionAttribute(value = "sessionStr") String sessionStr) {
+        System.out.println(sessionStr);
+        return "success";
     }
 
 }
