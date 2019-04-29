@@ -149,7 +149,7 @@ public class RedisDemoApplicationTests {
             }
 
         });
-        log.info("执行的所有数据为一个List:"+list.toString());
+        log.info("执行的所有数据为一个List:" + list.toString());
         Long end = System.currentTimeMillis();
         log.info("耗时:" + (end - start) + "毫秒");
     }
@@ -212,6 +212,22 @@ public class RedisDemoApplicationTests {
         operations.set(key, user, 10, TimeUnit.MINUTES);
 
         log.info("存入的user的信息为{}", user);
+    }
+
+    /**
+     * 增操作
+     *
+     * @throws Exception
+     */
+    @Test
+    public void incrOperation() throws Exception {
+        ValueOperations valueOperations = redisTemplate.opsForValue();
+        
+        valueOperations.set("increase1", "1");
+
+        //获取的是增加后的值
+        Long increase1 = valueOperations.increment("increase1");
+        log.info(increase1 + "");
     }
 
     /**
