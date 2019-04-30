@@ -14,8 +14,8 @@
     <logger name="org.springframework.web" level="debug"/>
     <!--<logger name="org.springframework" level="debug"/>-->
 
-    <!--配置mybatis sql日志-->
-    <logger name="com.redis.demo.dao" level="debug"/>
+    <!--配置mybatis sql日志,简单理解在里面配置logger,不用管日志级别,一定会打印,其他的需要考虑打印日志的日志级别-->
+    <logger name="com.springboot.demo.mapper" level="debug"/>
 
     <logger name="com.ibatis" level="debug"/>
     <logger name="com.ibatis.db" level="debug"/>

@@ -8,7 +8,7 @@ application:
 
 spring:
   application:
-    name: redis-demo
+    name: springboot-demo
 
   #springMvc相关的配置信息
   mvc:
@@ -68,29 +68,29 @@ spring:
   #数据源的相关配置
   datasource:
     url: jdbc:mysql://localhost:3306/redis_demo?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true          #数据库的连接地址
-    driverclassname: com.mysql.cj.jdbc.Driver               #mysql数据库连接驱动
+    driverclassname: com.mysql.cj.jdbc.Driver               #mysql数据库连接驱动,这个是最新的数据库连接驱动
     username: root                                          #用户名
     password: 123456                                        #密码
 
     ##########################  druid配置   ##########################
     type: com.alibaba.druid.pool.DruidDataSource
-    #druid_config
-    druid:
-      validation-query: "SELECT 'X' FROM DUAL"
-      max-wait: 10000 #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制
-      max-idle: 10 #最大空闲数，数据库连接的最大空闲时间。超过空闲时间，数据库连接将被释放。设为0表示无限制
-      min-idle: 5  #最小空闲连接:连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接
-      max_active: 50   #连接池的最大数据库连接数。设为0表示无限制
-      initial-size: 5  #初始化连接:连接池启动时创建的初始化连接数量
-      test-on-borrow: false
-      test-while-idle: true
-      remove_abandoned: true #超过removeAbandonedTimeout时间后，是否进 行没用连接（废弃）的回收（默认为false，调整为true)
-      remove_abandoned_timeout: 180 #超过时间限制，回收没有用(废弃)的连接（默认为 300秒，调整为180）
-      time-between-eviction-runs-millis: 18800
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      connection-properties: config.decrypt=true;druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      filters: stat,wall,log4j2
+    #druid_config连接池的配置信息
+    #初始化连接池大小,最小,最大
+    initialSize: 5    #初始化连接:连接池启动时创建的初始化连接数量
+    minIdle: 5        #最小空闲连接:连接池中容许保持空闲状态的最小连接数量,低于这个数量将创建新的连接
+    maxActive: 20     #连接池的最大数据库连接数。设为0表示无限制
+    #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制,单位为毫秒
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000          #配置间隔多久才进行一次检测,检测需要关闭的空闲连接,单位是毫秒
+    minEvictableIdleTimeMillis: 300000            #配置一个连接在连接池中最小生存的时间,单位是毫秒
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true                 #打开PSCache,并且制定每个连接上的PSCache的大小
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j2                    #配置监控统计拦截的filters,去掉后监控界面sql无法统计,'wall'用于防火墙
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000     #通过connectProperties属性来打开mergeSql功能,慢sql记录
 
   #email的相关配置
   mail:
@@ -161,19 +161,23 @@ spring:
     suffix: .html
 
   #mybatis的配置
-  #mybatis:
-  type-aliases-package: com.redis.demo.redisdemo.dataobject       #DO对象别名
+mybatis:
+  type-aliases-package: com.springboot.demo.dataobject       #DO对象别名
   configuration:
-    map-underscore-to-camel-case: true                           #支持DO对象属性和数据库字段驼峰映射
-  mapper-locations: classpath*:mappers/**/*Mapper.xml
-  config:
-    log-impl: orh.apache.ibatis.logging.stdout.StdOutImpl        #输出sql执行语句
+    map-underscore-to-camel-case: true               #支持DO对象属性和数据库字段驼峰映射
+    cache-enabled: false                             #二级缓存的开关
+    lazy-loading-enabled: true                       #全局启用或禁用延迟加载。当禁用时,所有关联对象将会即时加载
+    aggressive-lazy-loading: true                    #当启用时,有延迟加载属性的对象在被调用时将会完全加载任意属性.否则,每种属性将会按需要加载
+    multiple-result-sets-enabled: true               #是否允许单条sql返回多个数据集,默认为true
+    use-generated-keys: true                         #允许jdbc生成主键,需要驱动器支持,如果设置了true,这个设置将强制使用被生成的主键,有一些驱动器不兼容不过仍然可以执行,默认为false
+    call-setters-on-nulls: true                      #如果数据为空的字段,则该字段省略不显示,可以通过添加配置文件,添加查询数据为空是则返回null
+  mapper-locations: classpath*:mappers/**/*Mapper.xml            #指明mybatis的xml文件的路径,classpath和classpath*的区别为classpath只找到符合的路径包的时候就不会继续查找包了
 
 #mybatis-plus配置
 #mybatis-plus:
 #  mappers-locations: classpath*:mappers/**/*Mapper.xml
 #  #实体扫描，多个package用逗号或者分号分隔
-#  typeAliasesPackage: com.redis.demo.redisdemo.dataobject
+#  typeAliasesPackage: com.springboot.demo.dataobject
 #  global-config:
 #    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
 #    id-type: 2
@@ -315,3 +319,7 @@ logging:
   level:
     root: info                    #声明全局的日志级别为info级别的进行打印,默认为info级别以上
     #也可以单独指定一些包下的日志级别,比如指定mybatis下的日志为debug,那么打印出来的就为info加上mybatis包下的debug级别的日志
+#    com:
+#      springboot:
+#        demo:
+#          mapper: debug
