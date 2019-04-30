@@ -1,6 +1,8 @@
 package com.springboot.demo.provider;
 
 import com.springboot.demo.dto.ValidatorDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -22,6 +24,7 @@ import java.util.Map;
  **/
 
 @RestController
+@Api(tags = "JSR303校验接口", description = "JSR303校验接口")
 public class ValidController {
 
     /**
@@ -30,6 +33,7 @@ public class ValidController {
      * @return
      */
     @RequestMapping("valid/validate")     //会将JSR303的验证结果放到Errors对象中
+    @ApiOperation(value = "JSR303校验ValidatorDTO属性接口", notes = "JSR303校验ValidatorDTO属性接口")
     public Map<String, Object> validate(@Valid @RequestBody ValidatorDTO validatorDTO, Errors errors) {
 
         HashMap<String, Object> errMap = new HashMap<>();

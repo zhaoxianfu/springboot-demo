@@ -2,6 +2,8 @@ package com.springboot.demo.provider;
 
 import com.springboot.demo.pojo.User;
 import com.springboot.demo.validator.UserValidator;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -26,6 +28,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("user")
+@Api(tags = "spring根据自定义校验器校验参数接口", description = "spring根据自定义校验器校验参数接口")
 public class SpringValidatorController {
 
     /**
@@ -47,6 +50,7 @@ public class SpringValidatorController {
      * @return
      */
     @GetMapping("validatorUser")
+    @ApiOperation(value = "spring根据自定义的验证器进行数据校验接口", notes = "spring根据自定义的验证器进行数据校验接口")
     public Map<String, Object> validator(@Valid User user, Errors Errors) {
 
         Map<String, Object> map = new HashMap<>();

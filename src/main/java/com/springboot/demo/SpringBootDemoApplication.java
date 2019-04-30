@@ -44,7 +44,7 @@ public class SpringBootDemoApplication {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.redis.demo.redisdemo"))
+                .apis(RequestHandlerSelectors.basePackage("com.springboot.demo.provider"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
@@ -52,8 +52,8 @@ public class SpringBootDemoApplication {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("RedisDemo接口文档")
-                .description("API RedisDemo接口文档")
+                .title("SpringBootDemo接口文档")
+                .description("API SpringBootDemo接口文档")
                 .termsOfServiceUrl(" API terms of service")
                 .version("1.0.0")
                 .build();

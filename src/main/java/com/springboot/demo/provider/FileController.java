@@ -1,5 +1,7 @@
 package com.springboot.demo.provider;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping("file")
+@Api(tags = "文件上传接口", description = "文件上传接口")
 public class FileController {
 
     /**
@@ -31,6 +34,7 @@ public class FileController {
      * @return
      */
     @GetMapping("upload/request")
+    @ApiOperation(value = "打开文件上传请求页面--响应到/WEB-INF/jsp/file/upload.jsp页面上", notes = "打开文件上传请求页面--响应到/WEB-INF/jsp/file/upload.jsp页面上")
     public String uploadPage() {
         return "/file/updaload";
     }
@@ -57,6 +61,7 @@ public class FileController {
      */
     @PostMapping("upload/request")
     @ResponseBody
+    @ApiOperation(value = "第一种方式:使用HttpServletRequest方式作为参数", notes = "第一种方式:使用HttpServletRequest方式作为参数")
     public Map<String, Object> uploadRequest(HttpServletRequest request) {
 
         boolean flag = false;
@@ -92,6 +97,7 @@ public class FileController {
      */
     @PostMapping("upload/mutipart")
     @ResponseBody
+    @ApiOperation(value = "第二种方式:使用SpringMVC的MutipartFile---SpringMVC封装一层的请求", notes = "第二种方式:使用SpringMVC的MutipartFile---SpringMVC封装一层的请求")
     public Map<String, Object> uploadMultipartFile(@RequestParam("file") MultipartFile multipartFile) {
         //获取上文件的文件名称
         String fileName = multipartFile.getOriginalFilename();
@@ -115,6 +121,7 @@ public class FileController {
      */
     @PostMapping("upload/part")
     @ResponseBody
+    @ApiOperation(value = "第三种方式,根据原生的servlet里面的入参", notes = "第三种方式,根据原生的servlet里面的入参")
     public Map<String, Object> uploadPart(Part file) {
         //获取提交的文件名称
         String fileName = file.getSubmittedFileName();

@@ -2,6 +2,8 @@ package com.springboot.demo.provider;
 
 import com.springboot.demo.email.MailDO;
 import com.springboot.demo.email.MailService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@Api(tags = "Email发送接口", description = "Email发送接口")
 public class EmailController {
 
     @Autowired
@@ -34,6 +37,7 @@ public class EmailController {
      * @return
      */
     @GetMapping("testMail")
+    @ApiOperation(value = "发送文本邮件接口", notes = "发送文本邮件接口")
     public ResponseEntity<Void> testMail(MailDO mailDO) {
         try {
             mailService.sendTextMail(mailDO);
@@ -51,6 +55,7 @@ public class EmailController {
      * @return
      */
     @GetMapping("htmlMail")
+    @ApiOperation(value = "发送HTML邮件接口", notes = "发送HTML邮件接口")
     public ResponseEntity<Void> htmlMail(MailDO mailDO) {
         try {
             Map<String, Object> map = new HashMap<>();
@@ -76,6 +81,7 @@ public class EmailController {
      * @return
      */
     @GetMapping("templateMail")
+    @ApiOperation(value = "发送模板邮件接口", notes = "发送模板邮件接口")
     public ResponseEntity<Void> templateMail(MailDO mailDO) {
         try {
             Map<String, Object> map = new HashMap<>();

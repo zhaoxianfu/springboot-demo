@@ -1,5 +1,7 @@
 package com.springboot.demo.provider;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,12 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("kafka")
+@Api(tags = "kafka消息接口", description = "kafka消息接口")
 public class KafkaSenderController {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @RequestMapping(value = "/send")
+    @ApiOperation(value = "kafka发送消息接口", notes = "kafka发送消息接口")
     public String sendKafka(String message) {
         try {
             log.info("kafka的消息={}", message);
