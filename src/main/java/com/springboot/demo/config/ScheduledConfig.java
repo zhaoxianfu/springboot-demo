@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 
 /**
  * @ClassName:ScheduledConfig
- * @Despriction: 创建定时任务线程池并行执行----可以使很多的定时任务去同时执行
+ * @Despriction: 创建定时任务线程池并行执行--->可以使很多的定时任务去同时执行
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/1  11:42
  * @Version1.0

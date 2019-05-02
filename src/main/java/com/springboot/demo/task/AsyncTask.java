@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
 
 @Slf4j
 @Component
-public class TestTask {
+public class AsyncTask {
 
     /**
      * 异步任务此处必须返回Future，可以是Future<String>，也可以是Future<Integer>，自己定义具体的返回内容
@@ -31,7 +31,8 @@ public class TestTask {
 
         //这个线程睡1秒,也就是这个异步任务方法执行用时1秒
         Thread.sleep(1000);
-        System.out.println("执行任务1，用时1秒");
+        log.info("执行任务1，用时1秒");
+        log.info("当前的异步任务的线程名称为{}",Thread.currentThread().getName());
         return new AsyncResult<>("test1");
     }
 
@@ -40,7 +41,8 @@ public class TestTask {
 
         //这个线程睡1.5秒,也就是这个异步任务方法执行用时1.5秒
         Thread.sleep(1500);
-        System.out.println("执行任务2，用时1.5秒");
+        log.info("执行任务2，用时1.5秒");
+        log.info("当前的异步任务的线程名称为{}",Thread.currentThread().getName());
         return new AsyncResult<>("test2");
     }
 }

@@ -1,6 +1,7 @@
 package com.springboot.demo;
 
-import com.springboot.demo.task.TestTask;
+import com.springboot.demo.task.AsyncTask;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,21 @@ import java.util.concurrent.Future;
  * @Date:Created 2019/4/1  11:21
  * @Version1.0
  **/
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringBootDemoApplication.class)
 public class AsyncTaskTest {
 
     @Autowired
-    private TestTask asyncTask;
+    private AsyncTask asyncTask;
 
     @Test
     public void testAsyncTask() throws Exception {
 
         //执行异步任务的开始时间
         long starttime = System.currentTimeMillis();
+
+        log.info("当前的主线程的线程名称为{}",Thread.currentThread().getName());
 
         Future<String> task1 = asyncTask.test1();
         Future<String> task2 = asyncTask.test2();
@@ -39,7 +43,7 @@ public class AsyncTaskTest {
         }
         //执行异步任务的结束时间
         long endtime = System.currentTimeMillis();
-        System.out.println("执行两个异步任务总用时：" + (endtime - starttime) + "毫秒");
+        log.info("执行两个异步任务总用时：" + (endtime - starttime) + "毫秒");
     }
 
 }

@@ -5,8 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName:ScheduledTask
- * @Despriction:
- * 定时任务类---是一个串行的方式去执行这个定时任务---单线程
+ * @Despriction: 定时任务类---是一个串行的方式去执行这个定时任务---单线程
  * 如果定时任务特别多的话，就需要创建一个线程池去执行大量的定时任务
  * @Author:zhaoxianfu
  * @Date:Created 2019/4/1  11:32
@@ -23,20 +22,22 @@ public class ScheduledTask {
 //    @Scheduled(cron="*/5 * * * * *") ：通过cron表达式定义规则
 //    注意，这里的时间，单位是毫秒，1秒=1000毫秒
 
-   /* *//**
+    /**
      * 定时任务1
      * 每间隔10秒输出时间
-     *//*
-    @Scheduled(fixedRate = 10000)
+     */
+    /*@Scheduled(fixedRate = 10000)
     public void logTime1() {
+        log.info("当前的定时任务的线程名称为{}", Thread.currentThread().getName());
         log.info("定时任务1,现在时间：" + System.currentTimeMillis());
-    }
+    }*/
 
-    *//**
+    /**
      * 定时任务2---为了测试多线程下的多个任务调用类执行多个定时任务
-     *//*
-    @Scheduled(fixedRate = 5000)
+     */
+  /*  @Scheduled(fixedRate = 5000)
     public void logTime2() {
+        log.info("当前的定时任务的线程名称为{}", Thread.currentThread().getName());
         log.info("定时任务2,现在时间：" + System.currentTimeMillis());
     }*/
 }
