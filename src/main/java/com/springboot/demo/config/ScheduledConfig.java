@@ -31,13 +31,14 @@ public class ScheduledConfig implements SchedulingConfigurer {
     }
 
     /**
-     * 创建一个线程池对象
+     * 创建一个定时任务的线程池对象
      *
      * @return
      */
     @Bean
     public Executor setTaskExecutors() {
-        return Executors.newScheduledThreadPool(4); // 创建4个线程来处理。
+        // 创建4个线程的线程池来处理
+        return Executors.newScheduledThreadPool(4);
 
     }
 }

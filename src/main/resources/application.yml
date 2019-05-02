@@ -249,6 +249,11 @@ interceptor:
   loginInterceptor:
     enabled: false
 
+#配置枚举code转化为枚举对象的转换类的可拔插功能
+converter:
+  enumCodeConverter:
+    enabled: true
+
 #配置过滤器-->设置可进行拔插的功能,自己控制这个bean是否注入到容器中,true为注入这个过滤器,值为空或者为false为不注入这个过滤器
 filter:
   myFilter1:

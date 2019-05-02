@@ -33,8 +33,8 @@ public class BrandController {
 
     @GetMapping("selectByPrimaryKey/{id}")
     @ApiOperation(value = "根据商标号进行查询", notes = "根据商标号进行查询")
-    public ResultBase<Brand> selectByPrimaryKey(@ApiParam(name = "商标号") @PathVariable("id") Long id) {
-        Brand brand = brandService.selectByPrimaryKey(id);
+    public ResultBase<Brand> selectByPrimaryKey(@ApiParam(name = "商标号") @PathVariable("id") String id) {
+        Brand brand = brandService.selectByPrimaryKey(Long.parseLong(id));
         log.info(JSON.toJSONString(brand));
 
         ResultBase resultBase = new ResultBase();

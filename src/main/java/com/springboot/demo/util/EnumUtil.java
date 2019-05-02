@@ -22,7 +22,7 @@ public class EnumUtil {
      * @param <T>
      * @return
      */
-    public static <T extends Enum<T>> T getEnum(Class<T> clazz, Integer code) {
+    public static <T extends Enum> T getEnum(Class<T> clazz, Integer code) {
         for (T t : clazz.getEnumConstants()) {
 
             if (t instanceof KeyValueEnum) {

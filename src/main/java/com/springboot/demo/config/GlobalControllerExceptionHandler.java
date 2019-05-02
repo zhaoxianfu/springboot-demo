@@ -2,13 +2,11 @@ package com.springboot.demo.config;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.springboot.demo.model.ResultBase;
-import com.springboot.demo.validator.UserValidator;
 import feign.FeignException;
 import feign.RetryableException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,16 +29,15 @@ public class GlobalControllerExceptionHandler {
     }
 
     /**
-     * 应用到所有@RequestMapping注解方法--调用控制器前先执行这个方法进行绑定验证器,就不用在每一个controller上进行设置了,最好在这里WebDataBinder绑定所有自定义的验证器
-     * UserValidator这个验证器里面会设置这个验证器支持什么DTO对象进行验证
+     * 应用到所有@RequestMapping注解方法--->调用控制器前先执行这个方法进行绑定验证器
      *
      * @param binder
      */
-    @InitBinder
+   /* @InitBinder
     public void initBinder(WebDataBinder binder) {
         //绑定验证器
         binder.setValidator(new UserValidator());
-    }
+    }*/
 
     /**
      * 初始化属性及其属性值--把值绑定到HttpServletRequest中,应用到所有@RequestMapping注解方法可以获取这个值

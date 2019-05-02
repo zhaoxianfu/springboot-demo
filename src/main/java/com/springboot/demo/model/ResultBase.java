@@ -125,6 +125,20 @@ public class ResultBase<T> implements Serializable {
         return this;
     }
 
+    /**
+     * 创建一个返回值对象--->泛型不能用于静态方法
+     *
+     * @param obj
+     * @return
+     */
+    public static ResultBase createResultBase(Object obj) {
+        ResultBase resultBase = new ResultBase<>();
+        resultBase.setSuccess(true);
+        resultBase.setReality(true);
+        resultBase.setValue(obj);
+        return resultBase;
+    }
+
     public ResultBase<T> mapper(ResultBase<?> biz) {
         this.setCode(biz.getCode());
         this.setMsg(biz.getMsg());
@@ -136,7 +150,7 @@ public class ResultBase<T> implements Serializable {
 
     public void setTemplateMsg(String templateMsg) {
         this.msg = templateMsg;
-        this.additionalInfo.put("additionalInfoTemplateCodeKey", true);
+        this.additionalInfo.put("additionalInfoTemplateCodeKey", Boolean.TRUE);
     }
 
     public boolean isGetMsgByCode() {
@@ -145,7 +159,7 @@ public class ResultBase<T> implements Serializable {
                 return false;
             } else {
                 Object templateMsgObj = this.additionalInfo.get("additionalInfoTemplateCodeKey");
-                return null == templateMsgObj || !((Boolean) templateMsgObj).equals(true);
+                return null == templateMsgObj || !((Boolean) templateMsgObj).equals(Boolean.TRUE);
             }
         } else {
             return false;
